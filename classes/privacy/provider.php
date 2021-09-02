@@ -15,15 +15,32 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * Version details.
+ * Privacy Subsystem implementation for tool_resetcoursecompletion.
  *
  * @package    tool_resetcoursecompletion
- * @copyright  2021 Brain station 23 ltd <>  {@link https://brainstation-23.com/}
+ * @copyright  22021 Brain station 23 ltd <>  {@link https://brainstation-23.com/}
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
+namespace tool_resetcoursecompletion\privacy;
+
 defined('MOODLE_INTERNAL') || die();
 
-$plugin->version   = 2021080500; // The current plugin version (Date: YYYYMMDDXX).
-$plugin->requires  = 2021080500; // Requires this Moodle version.
-$plugin->component = 'tool_resetcoursecompletion'; // Full name of the plugin (used for diagnostics).
+/**
+ * Privacy Subsystem for tool_resetcoursecompletion implementing null_provider.
+ *
+ * @copyright  22021 Brain station 23 ltd <>  {@link https://brainstation-23.com/}
+ * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
+ */
+class provider implements \core_privacy\local\metadata\null_provider {
+
+    /**
+     * Get the language string identifier with the component's language
+     * file to explain why this plugin stores no data.
+     *
+     * @return  string
+     */
+    public static function get_reason() : string {
+        return 'privacy:metadata';
+    }
+}
