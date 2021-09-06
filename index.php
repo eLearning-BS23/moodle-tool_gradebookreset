@@ -15,15 +15,34 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * Version details.
- *
  * @package    tool_resetcoursecompletion
  * @copyright  2021 Brain station 23 ltd <>  {@link https://brainstation-23.com/}
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
-defined('MOODLE_INTERNAL') || die();
+require_once (__DIR__.'/../../../config.php');
+require_once($CFG->libdir.'/adminlib.php');
+require_once($CFG->libdir.'/gradelib.php');
+require_once($CFG->dirroot.'/'.$CFG->admin.'/tool/resetcoursecompletion/forms/coursefilter.php');
+//require_once($CFG->dirroot.'/'.$CFG->admin.'/tool/resetcoursecompletion/lang/en/tool_resetcoursecompletion.php');
 
-$plugin->version   = 2021090200; // The current plugin version (Date: YYYYMMDDXX).
-$plugin->requires  = 2021090200; // Requires this Moodle version.
-$plugin->component = 'tool_resetcoursecompletion'; // Full name of the plugin (used for diagnostics).
+$PAGE->set_url('/tool/resetcoursecompletion/index.php');
+$PAGE->set_context(context_system::instance());
+$PAGE->set_title(get_string('pluginname', 'tool_resetcoursecompletion'));
+$PAGE->set_heading(get_string('pluginname', 'tool_resetcoursecompletion'));
+
+
+echo $OUTPUT-> header();
+//echo get_string('resetcoursecompletion', 'tool_resetcoursecompletion');
+
+$mform = new coursefilter();
+
+$mform->set_data(array());
+$mform->display();
+//echo get_string('reset_confirm', 'tool_resetcoursecompletion');
+echo $OUTPUT->footer();
+
+
+
+
+
