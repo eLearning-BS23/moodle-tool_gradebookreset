@@ -15,15 +15,13 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * Strings for component 'tool_resetcoursecompletion', language 'en', branch 'MOODLE_22_STABLE'
+ * Link to CSV user upload
  *
  * @package    tool
  * @subpackage resetcoursecompletion
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
-$string['pluginname'] = 'Reset Course Completion';
-$string['resetcoursecompletion']  = 'Reset Course Completion';
-$string['reset_confirm'] = 'Are you sure you want to reset course completion for this entry?  You can not undo this.';
-$string['course_name'] = 'Course Name';
-$string['resetcoursecompletion_details'] = 'Choose course name and participant to reset his/her course completion records';
+defined('MOODLE_INTERNAL') || die;
+
+$ADMIN->add('courses', new admin_externalpage('resetcoursecompletion', get_string('pluginname', 'tool_resetcoursecompletion'), "$CFG->wwwroot/$CFG->admin/tool/resetcoursecompletion/index.php"));
