@@ -1,4 +1,5 @@
 <?php
+
 // This file is part of Moodle - http://moodle.org/
 //
 // Moodle is free software: you can redistribute it and/or modify
@@ -15,15 +16,13 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * Version details.
+ * Link to CSV user upload
  *
- * @package    tool_resetcoursecompletion
- * @copyright  2021 Brain station 23 ltd <>  {@link https://brainstation-23.com/}
+ * @package    tool
+ * @subpackage resetcoursecompletion
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
-defined('MOODLE_INTERNAL') || die();
+defined('MOODLE_INTERNAL') || die;
 
-$plugin->version   = 2021090200; // The current plugin version (Date: YYYYMMDDXX).
-$plugin->requires  = 2019111806; // Requires this Moodle version.
-$plugin->component = 'tool_resetcoursecompletion'; // Full name of the plugin (used for diagnostics).
+$ADMIN->add('courses', new admin_externalpage('resetcoursecompletion', get_string('resetcoursecompletion', 'tool_resetcoursecompletion'), "$CFG->wwwroot/$CFG->admin/tool/resetcoursecompletion/index.php"));

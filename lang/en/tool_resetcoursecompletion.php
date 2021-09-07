@@ -22,5 +22,11 @@
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
-$string['pluginname'] = 'Reset Course Completion';
+
+$string['resetcoursecompletion']  = 'Reset Course Completion';
+$string['pluginname']  = 'Reset Course Completion';
 $string['reset_confirm'] = 'Are you sure you want to reset course completion for this entry?  You can not undo this.';
+$string['course_name'] = 'Course Name';
+$string['participant_name'] ='Participants Name';
+$string['Participant_details'] = 'Participants Details';
+$string['resetcoursecompletion_details'] = 'Choose course name and participant to reset his/her course completion records';
