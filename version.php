@@ -24,6 +24,6 @@
 
 defined('MOODLE_INTERNAL') || die();
 
-$plugin->version   = 2021090200; // The current plugin version (Date: YYYYMMDDXX).
-$plugin->requires  = 2021090200; // Requires this Moodle version.
+$plugin->version   = 2021080500; // The current plugin version (Date: YYYYMMDDXX).
+$plugin->requires  = 2019111806; // Requires this Moodle version.
 $plugin->component = 'tool_resetcoursecompletion'; // Full name of the plugin (used for diagnostics).
