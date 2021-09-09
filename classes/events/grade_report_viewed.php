@@ -15,20 +15,33 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * Strings for component 'tool_resetcoursecompletion', language 'en', branch 'MOODLE_22_STABLE'
+ * Grader report viewed event.
  *
- * @package    tool
- * @subpackage resetcoursecompletion
+ * @package    gradereport_grader
+ * @copyright  2014 Adrian Greeve <adrian@moodle.com>
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
+namespace resetcoursecomletion\event;
 
-$string['resetcoursecompletion']  = 'Reset Course Completion';
-$string['pluginname']  = 'Reset Course Completion';
-$string['reset_confirm'] = 'Are you sure you want to reset course completion for this entry?  You can not undo this.';
-$string['course_name'] = 'Course Name';
-$string['participant_name'] ='Participants Name';
-$string['Participant_details'] = 'Participants Details';
-$string['resetcoursecompletion_details'] = 'Choose course name and participant to reset his/her course completion records';
-$string['submit'] = 'Show Participants';
-$string['participants'] = 'Reset Participants';
+defined('MOODLE_INTERNAL') || die();
+
+/**
+ * Grader report viewed event class.
+ *
+ * @package    gradereport_grader
+ * @since      Moodle 2.8
+ * @copyright  2014 Adrian Greeve <adrian@moodle.com>
+ * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
+ */
+class grade_report_viewed extends \core\event\grade_report_viewed {
+
+    /**
+     * Returns localised general event name.
+     *
+     * @return string
+     */
+    public static function get_name() {
+        return get_string('pluginname', 'tool_resetcoursecompletion');
+    }
+}
