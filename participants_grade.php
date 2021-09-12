@@ -18,7 +18,7 @@
  * The Reset Course Completion grade report
  *
  * @package   resetcoursecompletion
- * @copyright 2007 Moodle Pty Ltd (http://moodle.com)
+ * @copyright 2021 Brain station 23 ltd <>  {@link https://brainstation-23.com/}
  * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
@@ -72,7 +72,7 @@ require_capability('moodle/grade:viewall', $context);
 $gpr = new grade_plugin_return(
     array(
         'type' => 'report',
-        'plugin' => 'grader',
+        'plugin' => 'resetcoursecompletion',
         'course' => $course,
         'page' => $page
     )
@@ -105,7 +105,9 @@ if (has_capability('moodle/grade:edit', $context)) {
 $gradeserror = array();
 
 $reportname = get_string('pluginname', 'tool_resetcoursecompletion');
+
 echo $OUTPUT->header();
+echo "<h1>".$reportname."</h1>";
 
 //Initialise the grader report object that produces the table
 //the class grade_report_grader_ajax was removed as part of MDL-21562
@@ -140,7 +142,7 @@ $reporthtml = $report->get_grade_table($displayaverages);
 
 
 //printing the grade report
-    echo $reporthtml;
+echo $reporthtml;
 
 
 // prints paging bar at bottom for large pages
@@ -150,4 +152,3 @@ if (!empty($studentsperpage) && $studentsperpage >= 20) {
 
 
 echo $OUTPUT->footer();
-

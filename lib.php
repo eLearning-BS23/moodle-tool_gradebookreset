@@ -22,7 +22,7 @@
  * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
-require_once($CFG->dirroot . '/grade/report/lib.php');
+require_once($CFG->dirroot . '/admin/tool/resetcoursecompletion/report_lib.php');
 require_once($CFG->libdir.'/tablelib.php');
 
 /**
@@ -647,15 +647,16 @@ class grade_report_grader extends grade_report {
         $showuserimage = $this->get_pref('showuserimage');
         // FIXME: MDL-52678 This get_capability_info is hacky and we should have an API for inserting grade row links instead.
         $canseeuserreport = false;
-        $canseesingleview = false;
+
+
+
+
+       /////////////////////////edit/////////////////////
         if (get_capability_info('gradereport/'.$CFG->grade_profilereport.':view')) {
             $canseeuserreport = has_capability('gradereport/'.$CFG->grade_profilereport.':view', $this->context);
         }
-        if (get_capability_info('gradereport/singleview:view')) {
-            $canseesingleview = has_all_capabilities(array('gradereport/singleview:view', 'moodle/grade:viewall',
-            'moodle/grade:edit'), $this->context);
-        }
-        $hasuserreportcell = $canseeuserreport || $canseesingleview;
+//single
+        $hasuserreportcell = $canseeuserreport;
         $viewfullnames = has_capability('moodle/site:viewfullnames', $this->context);
 
         $strfeedback  = $this->get_lang_string("feedback");
@@ -687,6 +688,7 @@ class grade_report_grader extends grade_report {
         $headerrow->attributes['class'] = 'heading';
 
         $studentheader = new html_table_cell();
+
         // The browser's scrollbar may partly cover (in certain operative systems) the content in the student header
         // when horizontally scrolling through the table contents (most noticeable when in RTL mode).
         // Therefore, add slight padding on the left or right when using RTL mode.
@@ -741,16 +743,7 @@ class grade_report_grader extends grade_report {
                     ['class' => 'username']
             );
 
-            if (!empty($user->suspendedenrolment)) {
-                $usercell->attributes['class'] .= ' usersuspended';
 
-                //may be lots of suspended users so only get the string once
-                if (empty($suspendedstring)) {
-                    $suspendedstring = get_string('userenrolmentsuspended', 'grades');
-                }
-                $icon = $OUTPUT->pix_icon('i/enrolmentsuspended', $suspendedstring);
-                $usercell->text .= html_writer::tag('span', $icon, array('class'=>'usersuspendedicon'));
-            }
             // The browser's scrollbar may partly cover (in certain operative systems) the content in the user cells
             // when horizontally scrolling through the table contents (most noticeable when in RTL mode).
             // Therefore, add slight padding on the left or right when using RTL mode.
@@ -761,24 +754,22 @@ class grade_report_grader extends grade_report {
             $userreportcell = new html_table_cell();
             $userreportcell->attributes['class'] = 'userreport';
             $userreportcell->header = false;
+            /////////
             if ($canseeuserreport) {
                 $a = new stdClass();
                 $a->user = $fullname;
-                $strgradesforuser = get_string('gradesforuser', 'grades', $a);
-                $url = new moodle_url('/grade/report/'.$CFG->grade_profilereport.'/index.php',
+                $strgradesforuser = get_string('resetgrades', 'tool_resetcoursecompletion', $a);
+                $url = new moodle_url('#',
                         ['userid' => $user->id, 'id' => $this->course->id]);
-                $userreportcell->text .= $OUTPUT->action_icon($url, new pix_icon('t/grades', ''), null,
-                        ['title' => $strgradesforuser, 'aria-label' => $strgradesforuser]);
+
+//                $userreportcell->text .= $OUTPUT->action_icon($url, new pix_icon('reset', 'Reset', 'resetcoursecompletion/pix'), null,
+//                    ['title' => $strgradesforuser, 'aria-label' => $strgradesforuser]);
+
+                $userreportcell->text .= $OUTPUT->action_icon($url, new pix_icon('reset', 'Reset','tool_resetcoursecompletion' ));
+
+
             }
 
-            if ($canseesingleview) {
-                $strsingleview = get_string('singleview', 'grades', $fullname);
-                $url = new moodle_url('/grade/report/singleview/index.php',
-                        ['id' => $this->course->id, 'itemid' => $user->id, 'item' => 'user']);
-                $singleview = $OUTPUT->action_icon($url, new pix_icon('t/editstring', ''), null,
-                        ['title' => $strsingleview, 'aria-label' => $strsingleview]);
-                $userreportcell->text .= $singleview;
-            }
 
             if ($userreportcell->text) {
                 $userrow->cells[] = $userreportcell;
@@ -923,29 +914,10 @@ class grade_report_grader extends grade_report {
                         $itemcell->attributes['class'] .= ' dimmed_text';
                     }
 
-                    $singleview = '';
-
-                    // FIXME: MDL-52678 This is extremely hacky we should have an API for inserting grade column links.
-                    if (get_capability_info('gradereport/singleview:view')) {
-                        if (has_all_capabilities(array('gradereport/singleview:view', 'moodle/grade:viewall',
-                            'moodle/grade:edit'), $this->context)) {
-
-                            $strsingleview = get_string('singleview', 'grades', $element['object']->get_name());
-                            $url = new moodle_url('/grade/report/singleview/index.php', array(
-                                'id' => $this->course->id,
-                                'item' => 'grade',
-                                'itemid' => $element['object']->id));
-                            $singleview = $OUTPUT->action_icon(
-                                    $url,
-                                    new pix_icon('t/editstring', ''),
-                                    null,
-                                    ['title' => $strsingleview, 'aria-label' => $strsingleview]
-                            );
-                        }
-                    }
+// single
 
                     $itemcell->colspan = $colspan;
-                    $itemcell->text = $headerlink . $arrow . $singleview;
+                    $itemcell->text = $headerlink . $arrow ;
                     $itemcell->header = true;
                     $itemcell->scope = 'col';
 
@@ -1275,15 +1247,16 @@ class grade_report_grader extends grade_report {
      */
     public function get_grade_table($displayaverages = false) {
         global $OUTPUT;
+
         $leftrows = $this->get_left_rows($displayaverages);
         $rightrows = $this->get_right_rows($displayaverages);
 
         $html = '';
 /////edit here
         $fulltable = new html_table();
-        $fulltable->attributes['class'] = 'gradereport-grader-table';
-        $fulltable->id = 'user-grades';
-        $fulltable->caption = get_string('summarygrader', 'gradereport_grader');
+        $fulltable->attributes['class'] = 'resetcourse-grade-table';
+        $fulltable->id = 'reset-user-grades';
+        $fulltable->caption = get_string('summarygrader', 'tool_resetcoursecompletion');
         $fulltable->captionhide = true;
 
 
@@ -1652,22 +1625,6 @@ class grade_report_grader extends grade_report {
 
             $url = new moodle_url($this->gpr->get_return_url(null, array('target' => $element['eid'], 'sesskey' => sesskey())));
 
-            if (in_array($element['object']->id, $this->collapsed['aggregatesonly'])) {
-                $url->param('action', 'switch_plus');
-                $icon = $OUTPUT->action_icon($url, new pix_icon('t/switch_plus', ''), null,
-                        ['title' => $strswitchplus, 'aria-label' => $strswitchplus]);
-                $showing = get_string('showingaggregatesonly', 'grades');
-            } else if (in_array($element['object']->id, $this->collapsed['gradesonly'])) {
-                $url->param('action', 'switch_whole');
-                $icon = $OUTPUT->action_icon($url, new pix_icon('t/switch_whole', ''), null,
-                        ['title' => $strswitchwhole, 'aria-label' => $strswitchwhole]);
-                $showing = get_string('showinggradesonly', 'grades');
-            } else {
-                $url->param('action', 'switch_minus');
-                $icon = $OUTPUT->action_icon($url, new pix_icon('t/switch_minus', ''), null,
-                        ['title' => $strswitchminus, 'aria-label' => $strswitchminus]);
-                $showing = get_string('showingfullmode', 'grades');
-            }
         }
 
         $name = $element['object']->get_name();
@@ -1936,8 +1893,7 @@ class grade_report_grader extends grade_report {
 
         $strsortasc   = $this->get_lang_string('sortasc', 'grades');
         $strsortdesc  = $this->get_lang_string('sortdesc', 'grades');
-        $iconasc = $OUTPUT->pix_icon('t/sort_asc', $strsortasc, '', array('class' => 'iconsmall sorticon'));
-        $icondesc = $OUTPUT->pix_icon('t/sort_desc', $strsortdesc, '', array('class' => 'iconsmall sorticon'));
+
 
         // Sourced from tablelib.php
         // Check the full name display for sortable fields.

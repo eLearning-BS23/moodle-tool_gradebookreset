@@ -32,3 +32,8 @@ $string['Participant_details'] = 'Participants Details';
 $string['resetcoursecompletion_details'] = 'Choose course name and participant to reset his/her course completion records';
 $string['submit'] = 'Show Participants';
 $string['participants'] = 'Reset Participants';
+$string['resetgrades'] = 'Reset Grades of';
+$string['summarygrader'] = 'A table with the names of students in the first column, with assessable activities grouped by course and category across the top.';
+
+
+
