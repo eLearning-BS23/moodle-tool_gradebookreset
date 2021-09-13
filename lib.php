@@ -759,8 +759,8 @@ class grade_report_grader extends grade_report {
                 $a = new stdClass();
                 $a->user = $fullname;
                 $strgradesforuser = get_string('resetgrades', 'tool_resetcoursecompletion', $a);
-                $url = new moodle_url('#',
-                        ['userid' => $user->id, 'id' => $this->course->id]);
+                $url = new moodle_url('/admin/tool/resetcoursecompletion/resetconfirm.php');
+//                        ['userid' => $user->id, 'id' => $this->course->id]);
 
 //                $userreportcell->text .= $OUTPUT->action_icon($url, new pix_icon('reset', 'Reset', 'resetcoursecompletion/pix'), null,
 //                    ['title' => $strgradesforuser, 'aria-label' => $strgradesforuser]);

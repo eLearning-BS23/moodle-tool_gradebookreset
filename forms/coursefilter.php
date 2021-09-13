@@ -32,19 +32,8 @@ class coursefilter extends moodleform
         global $CFG, $DB;
         $flag = 0;
 
-//        $mform = $this->_form; // Don't forget the underscore!
-//        $mform->addElement('html', '<h4>' . get_string('resetcoursecompletion_details', 'tool_resetcoursecompletion') . '</h4><br><br>');
-
         $courses = $DB->get_records('course', null);
-//        var_dump($courses);
-//        $options = [];
-//        $options[-1] = 'None';
-//        foreach ($courses as $course) {
-//            $options[$course->id] = $course->fullname;
-//        }
-//        $mform->addElement('select', 'courses', get_string('course_name', 'tool_resetcoursecompletion'), $options); // Add elements to your form
-//        $mform->addElement('submit', 'submit', get_string('submit', 'tool_resetcoursecompletion'));
-//        $mform->addElement('button', 'intro', get_string("buttonlabel"));
+
         ?>
         <form autocomplete="off" action="<?= $CFG->wwwroot; ?>/admin/tool/resetcoursecompletion/participants_grade.php"
               method="get" accept-charset="utf-8" class="mform">
@@ -73,7 +62,7 @@ class coursefilter extends moodleform
                     </div>
                 </div>
             </div>
-            <div id="fitem_id_submit" class="form-group row  fitem femptylabel  ">
+            <div id="fitem_id_submit" class="form-group row  fitem femptylabel">
                 <div class="col-md-3 col-form-label d-flex pb-0 pr-md-0">
 
                     <div class="form-label-addon d-flex align-items-center align-self-start">
@@ -87,29 +76,8 @@ class coursefilter extends moodleform
                     </div>
                 </div>
             </div>
-
         </form>
         <?php
-
-
-//        if($myvalue){
-//            $PAGE->set_url('/courseteaser_admin/course_order.php');
-//
-//            $PAGE->set_context(context_system::instance());
-//            $PAGE->set_pagetype('my-index');
-//
-//            $PAGE->set_title(get_string('courseorder','local_courseteaser_admin'));
-//
-//            $PAGE->set_heading(get_string('courseorder','local_courseteaser_admin'));
-//
-//
-//            $PAGE->navbar->add(get_string('courseorder', 'local_courseteaser_admin'));
-//
-//            echo $OUTPUT->header();
-//
-//
-//            echo $OUTPUT->footer();
-//        }
 
 
     }
