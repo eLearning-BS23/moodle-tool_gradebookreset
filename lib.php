@@ -15,7 +15,7 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * Definition of the grader report class
+ * Definition of the grade report class
  *
  * @package   resetcoursecompletion
  * @copyright 2007 Nicolas Connault
@@ -26,12 +26,12 @@ require_once($CFG->dirroot . '/admin/tool/resetcoursecompletion/report_lib.php')
 require_once($CFG->libdir.'/tablelib.php');
 
 /**
- * Class providing an API for the grader report building and displaying.
+ * Class providing an API for the grade report building and displaying.
  * @uses grade_report
  * @copyright 2007 Nicolas Connault
  * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
-class grade_report_grader extends grade_report {
+class grade_report_reset extends grade_report {
     /**
      * The final grades.
      * @var array $grades
@@ -632,7 +632,7 @@ class grade_report_grader extends grade_report {
     }
 
     /**
-     * Builds and returns the rows that will make up the left part of the grader report
+     * Builds and returns the rows that will make up the left part of the grade report
      * This consists of student names and icons, links to user reports and id numbers, as well
      * as header cells for these columns. It also includes the fillers required for the
      * categories displayed on the right side of the report.
@@ -797,7 +797,7 @@ class grade_report_grader extends grade_report {
     }
 
     /**
-     * Builds and returns the rows that will make up the right part of the grader report
+     * Builds and returns the rows that will make up the right part of the grade report
      * @param boolean $displayaverages whether to display average rows in the table
      * @return array Array of html_table_row objects
      */
@@ -914,8 +914,6 @@ class grade_report_grader extends grade_report {
                         $itemcell->attributes['class'] .= ' dimmed_text';
                     }
 
-// single
-
                     $itemcell->colspan = $colspan;
                     $itemcell->text = $headerlink . $arrow ;
                     $itemcell->header = true;
@@ -1010,7 +1008,7 @@ class grade_report_grader extends grade_report {
                 }
 
                 // MDL-11274
-                // Hide grades in the grader report if the current grader doesn't have 'moodle/grade:viewhidden'
+                // Hide grades in the grade report if the current grade doesn't have 'moodle/grade:viewhidden'
                 if (!$this->canviewhidden and $grade->is_hidden()) {
                     if (!empty($CFG->grade_hiddenasdate) and $grade->get_datesubmitted() and !$item->is_category_item() and !$item->is_course_item()) {
                         // the problem here is that we do not have the time when grade value was modified, 'timemodified' is general modification date for grade_grades records
@@ -1036,7 +1034,7 @@ class grade_report_grader extends grade_report {
                 }
                 if ($grade->is_overridden()) {
                     $itemcell->attributes['class'] .= ' overridden';
-                    $itemcell->attributes['aria-label'] = get_string('overriddengrade', 'gradereport_grader');
+                    $itemcell->attributes['aria-label'] = get_string('overriddengrade', 'tool_resetcoursecompletion');
                 }
 
                 if (!empty($grade->feedback)) {
@@ -1109,7 +1107,7 @@ class grade_report_grader extends grade_report {
                             $attributes = array('tabindex' => $tabindices[$item->id]['grade'], 'id'=>'grade_'.$userid.'_'.$item->id);
                             $gradelabel = $fullname . ' ' . $item->get_name(true);
                             $itemcell->text .= html_writer::label(
-                                get_string('useractivitygrade', 'gradereport_grader', $gradelabel), $attributes['id'], false,
+                                get_string('useractivitygrade', 'tool_resetcoursecompletion', $gradelabel), $attributes['id'], false,
                                     array('class' => 'accesshide'));
                             $itemcell->text .= html_writer::select($scaleopt, 'grade['.$userid.']['.$item->id.']', $gradeval, array(-1=>$nogradestr), $attributes);
                         } else if (!empty($scale)) {
@@ -1129,7 +1127,7 @@ class grade_report_grader extends grade_report {
                             $value = format_float($gradeval, $decimalpoints);
                             $gradelabel = $fullname . ' ' . $item->get_name(true);
                             $itemcell->text .= '<label class="accesshide" for="grade_'.$userid.'_'.$item->id.'">'
-                                          .get_string('useractivitygrade', 'gradereport_grader', $gradelabel).'</label>';
+                                          .get_string('useractivitygrade', 'tool_resetcoursecompletion', $gradelabel).'</label>';
                             $itemcell->text .= '<input size="6" tabindex="' . $tabindices[$item->id]['grade']
                                           . '" type="text" class="text" title="'. $strgrade .'" name="grade['
                                           .$userid.'][' .$item->id.']" id="grade_'.$userid.'_'.$item->id.'" value="'.$value.'" />';
@@ -1143,7 +1141,7 @@ class grade_report_grader extends grade_report {
                     if ($showquickfeedback and $grade->is_editable()) {
                         $feedbacklabel = $fullname . ' ' . $item->get_name(true);
                         $itemcell->text .= '<label class="accesshide" for="feedback_'.$userid.'_'.$item->id.'">'
-                                      .get_string('useractivityfeedback', 'gradereport_grader', $feedbacklabel).'</label>';
+                                      .get_string('useractivityfeedback', 'tool_resetcoursecompletion', $feedbacklabel).'</label>';
                         $itemcell->text .= '<input class="quickfeedback" tabindex="' . $tabindices[$item->id]['feedback'].'" id="feedback_'.$userid.'_'.$item->id
                                       . '" size="6" title="' . $strfeedback . '" type="text" name="feedback['.$userid.']['.$item->id.']" value="' . s($grade->feedback) . '" />';
                     }
@@ -1218,13 +1216,13 @@ class grade_report_grader extends grade_report {
         $jsarguments['cfg']['showquickfeedback'] = (bool) $showquickfeedback;
 
         $module = array(
-            'name'      => 'gradereport_grader',
-            'fullpath'  => '/grade/report/grader/module.js',
+            'name'      => 'resetcoursecompletion',
+            'fullpath'  => '/admin/tool/resetcoursecompletion/assets/module.js',
             'requires'  => array('base', 'dom', 'event', 'event-mouseenter', 'event-key', 'io-queue', 'json-parse', 'overlay')
         );
         $PAGE->requires->js_init_call('M.gradereport_grader.init_report', $jsarguments, false, $module);
         $PAGE->requires->strings_for_js(array('addfeedback', 'feedback', 'grade'), 'grades');
-        $PAGE->requires->strings_for_js(array('ajaxchoosescale', 'ajaxclicktoclose', 'ajaxerror', 'ajaxfailedupdate', 'ajaxfieldchanged'), 'gradereport_grader');
+        $PAGE->requires->strings_for_js(array('ajaxchoosescale', 'ajaxclicktoclose', 'ajaxerror', 'ajaxfailedupdate', 'ajaxfieldchanged'), 'tool_resetcoursecompletion');
         if (!$enableajax && $USER->gradeediting[$this->courseid]) {
             $PAGE->requires->js_call_amd('core_form/changechecker', 'watchFormById', ['gradereport_grader']);
         }
@@ -1237,6 +1235,12 @@ class grade_report_grader extends grade_report {
 
         return $rows;
     }
+
+
+
+
+
+
 
     /**
      * Depending on the style of report (fixedstudents vs traditional one-table),
@@ -1252,7 +1256,7 @@ class grade_report_grader extends grade_report {
         $rightrows = $this->get_right_rows($displayaverages);
 
         $html = '';
-/////edit here
+
         $fulltable = new html_table();
         $fulltable->attributes['class'] = 'resetcourse-grade-table';
         $fulltable->id = 'reset-user-grades';
@@ -1298,7 +1302,7 @@ class grade_report_grader extends grade_report {
     }
 
     /**
-     * Builds and return the header for the row of ranges, for the left part of the grader report.
+     * Builds and return the header for the row of ranges, for the left part of the grade report.
      * @param array $rows The Array of rows for the left part of the report
      * @param int $colspan The number of columns this cell has to span
      * @return array Array of rows for the left part of the report
@@ -1323,7 +1327,7 @@ class grade_report_grader extends grade_report {
     }
 
     /**
-     * Builds and return the headers for the rows of averages, for the left part of the grader report.
+     * Builds and return the headers for the rows of averages, for the left part of the grade report.
      * @param array $rows The Array of rows for the left part of the report
      * @param int $colspan The number of columns this cell has to span
      * @param bool $groupavg If true, returns the row for group averages, otherwise for overall averages
@@ -1374,7 +1378,7 @@ class grade_report_grader extends grade_report {
     }
 
     /**
-     * Builds and return the row of icons when editing is on, for the right part of the grader report.
+     * Builds and return the row of icons when editing is on, for the right part of the grade report.
      * @param array $rows The Array of rows for the right part of the report
      * @return array Array of rows for the right part of the report
      */
@@ -1401,7 +1405,7 @@ class grade_report_grader extends grade_report {
     }
 
     /**
-     * Builds and return the row of ranges for the right part of the grader report.
+     * Builds and return the row of ranges for the right part of the grade report.
      * @param array $rows The Array of rows for the right part of the report
      * @return array Array of rows for the right part of the report
      */
@@ -1435,7 +1439,7 @@ class grade_report_grader extends grade_report {
     }
 
     /**
-     * Builds and return the row of averages for the right part of the grader report.
+     * Builds and return the row of averages for the right part of the grade report.
      * @param array $rows Whether to return only group averages or all averages.
      * @param bool $grouponly Whether to return only group averages or all averages.
      * @return array Array of rows for the right part of the report
@@ -1490,9 +1494,9 @@ class grade_report_grader extends grade_report {
                       JOIN {grade_grades} g ON g.itemid = gi.id
                       JOIN {user} u ON u.id = g.userid
                       JOIN ($enrolledsql) je ON je.id = u.id
-                      JOIN (
+                      JOIN ( 
                                SELECT DISTINCT ra.userid
-                                 FROM {role_assignments} ra
+                                   FROM {role_assignments} ra
                                 WHERE ra.roleid $gradebookrolessql
                                   AND ra.contextid $relatedctxsql
                            ) rainner ON rainner.userid = u.id
@@ -1646,7 +1650,7 @@ class grade_report_grader extends grade_report {
     /**
      * Given a grade_category, grade_item or grade_grade, this function
      * figures out the state of the object and builds then returns a div
-     * with the icons needed for the grader report.
+     * with the icons needed for the grade report.
      *
      * @param array $element
      * @return string HTML
@@ -1755,12 +1759,12 @@ class grade_report_grader extends grade_report {
      * @return array
      */
     protected static function get_collapsed_preferences($courseid) {
-        if ($collapsed = get_user_preferences('grade_report_grader_collapsed_categories'.$courseid)) {
+        if ($collapsed = get_user_preferences('grade_report_reset_collapsed_categories'.$courseid)) {
             return json_decode($collapsed, true);
         }
 
         // Try looking for old location of user setting that used to store all courses in one serialized user preference.
-        if (($oldcollapsedpref = get_user_preferences('grade_report_grader_collapsed_categories')) !== null) {
+        if (($oldcollapsedpref = get_user_preferences('grade_report_reset_collapsed_categories')) !== null) {
             if ($collapsedall = unserialize_array($oldcollapsedpref)) {
                 // We found the old-style preference, filter out only categories that belong to this course and update the prefs.
                 $collapsed = static::filter_collapsed_categories($courseid, $collapsedall);
@@ -1769,14 +1773,14 @@ class grade_report_grader extends grade_report {
                     $collapsedall['aggregatesonly'] = array_diff($collapsedall['aggregatesonly'], $collapsed['aggregatesonly']);
                     $collapsedall['gradesonly'] = array_diff($collapsedall['gradesonly'], $collapsed['gradesonly']);
                     if (!empty($collapsedall['aggregatesonly']) || !empty($collapsedall['gradesonly'])) {
-                        set_user_preference('grade_report_grader_collapsed_categories', serialize($collapsedall));
+                        set_user_preference('grade_report_reset_collapsed_categories', serialize($collapsedall));
                     } else {
-                        unset_user_preference('grade_report_grader_collapsed_categories');
+                        unset_user_preference('grade_report_reset_collapsed_categories');
                     }
                 }
             } else {
                 // We found the old-style preference, but it is unreadable, discard it.
-                unset_user_preference('grade_report_grader_collapsed_categories');
+                unset_user_preference('grade_report_reset_collapsed_categories');
             }
         } else {
             $collapsed = array('aggregatesonly' => array(), 'gradesonly' => array());
@@ -1811,9 +1815,9 @@ class grade_report_grader extends grade_report {
         }
 
         if (!empty($collapsed['aggregatesonly']) || !empty($collapsed['gradesonly'])) {
-            set_user_preference('grade_report_grader_collapsed_categories'.$courseid, json_encode($collapsed));
+            set_user_preference('grade_report_reset_collapsed_categories'.$courseid, json_encode($collapsed));
         } else {
-            unset_user_preference('grade_report_grader_collapsed_categories'.$courseid);
+            unset_user_preference('grade_report_reset_collapsed_categories'.$courseid);
         }
     }
 
@@ -1837,7 +1841,7 @@ class grade_report_grader extends grade_report {
         }
 
         if (!$courseid) {
-            debugging('Function grade_report_grader::do_process_action() now requires additional argument courseid',
+            debugging('Function grade_report_reset::do_process_action() now requires additional argument courseid',
                 DEBUG_DEVELOPER);
             if (!$courseid = $DB->get_field('grade_categories', 'courseid', array('id' => $targetid), IGNORE_MISSING)) {
                 return true;

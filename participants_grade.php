@@ -110,8 +110,8 @@ echo $OUTPUT->header();
 echo "<h1>".$reportname."</h1>";
 
 //Initialise the grader report object that produces the table
-//the class grade_report_grader_ajax was removed as part of MDL-21562
-$report = new grade_report_grader($courseid, $gpr, $context, $page, $sortitemid);
+//the class grade_report_reset_ajax was removed as part of MDL-21562
+$report = new grade_report_reset($courseid, $gpr, $context, $page, $sortitemid);
 $numusers = $report->get_numusers(true, true);
 
 // final grades MUST be loaded after the processing

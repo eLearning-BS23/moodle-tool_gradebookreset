@@ -34,6 +34,15 @@ $string['submit'] = 'Show Participants';
 $string['participants'] = 'Reset Participants';
 $string['resetgrades'] = 'Reset Grades of';
 $string['summarygrader'] = 'A table with the names of students in the first column, with assessable activities grouped by course and category across the top.';
+$string['overriddengrade'] = 'Overridden grade';
+$string['useractivitygrade'] = '{$a} grade';
+$string['useractivityfeedback'] = '{$a} feedback';
+
+$string['ajaxchoosescale'] = 'Choose';
+$string['ajaxerror'] = 'Error';
+$string['ajaxclicktoclose'] = 'Click this box to remove it';
+$string['ajaxfailedupdate'] = 'Unable to update [1] for [2]';
+$string['ajaxfieldchanged'] = 'The field you are currently editing has changed, would you like to use the updated value?';
 
 
 
