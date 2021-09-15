@@ -27,11 +27,11 @@ require_once($CFG->libdir.'/tablelib.php');
 
 /**
  * Class providing an API for the grade report building and displaying.
- * @uses grade_report
+ * @uses gradereport
  * @copyright 2007 Nicolas Connault
  * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
-class grade_report_reset extends grade_report {
+class grade_report_reset extends gradereport {
     /**
      * The final grades.
      * @var array $grades
@@ -135,7 +135,7 @@ class grade_report_reset extends grade_report {
         if (empty($CFG->enableoutcomes)) {
             $nooutcomes = false;
         } else {
-            $nooutcomes = get_user_preferences('grade_report_shownooutcomes');
+            $nooutcomes = get_user_preferences('gradereport_shownooutcomes');
         }
 
         // if user report preference set or site report setting set use it, otherwise use course or site setting
@@ -431,8 +431,8 @@ class grade_report_reset extends grade_report {
 
         // Check the status of showing only active enrolments.
         $coursecontext = $this->context->get_course_context(true);
-        $defaultgradeshowactiveenrol = !empty($CFG->grade_report_showonlyactiveenrol);
-        $showonlyactiveenrol = get_user_preferences('grade_report_showonlyactiveenrol', $defaultgradeshowactiveenrol);
+        $defaultgradeshowactiveenrol = !empty($CFG->gradereport_showonlyactiveenrol);
+        $showonlyactiveenrol = get_user_preferences('gradereport_showonlyactiveenrol', $defaultgradeshowactiveenrol);
         $showonlyactiveenrol = $showonlyactiveenrol || !has_capability('moodle/course:viewsuspendedusers', $coursecontext);
 
         // Limit to users with an active enrollment.
@@ -1478,8 +1478,8 @@ class grade_report_reset extends grade_report {
 
             // Limit to users with an active enrollment.
             $coursecontext = $this->context->get_course_context(true);
-            $defaultgradeshowactiveenrol = !empty($CFG->grade_report_showonlyactiveenrol);
-            $showonlyactiveenrol = get_user_preferences('grade_report_showonlyactiveenrol', $defaultgradeshowactiveenrol);
+            $defaultgradeshowactiveenrol = !empty($CFG->gradereport_showonlyactiveenrol);
+            $showonlyactiveenrol = get_user_preferences('gradereport_showonlyactiveenrol', $defaultgradeshowactiveenrol);
             $showonlyactiveenrol = $showonlyactiveenrol || !has_capability('moodle/course:viewsuspendedusers', $coursecontext);
             list($enrolledsql, $enrolledparams) = get_enrolled_sql($this->context, '', 0, $showonlyactiveenrol);
 
@@ -1556,7 +1556,7 @@ class grade_report_reset extends grade_report {
                     $ungradedcount = $ungradedcounts[$itemid]->count;
                 }
 
-                if ($meanselection == GRADE_REPORT_MEAN_GRADED) {
+                if ($meanselection == gradereport_MEAN_GRADED) {
                     $meancount = $totalcount - $ungradedcount;
                 } else { // Bump up the sum by the number of ungraded items * grademin
                     $sumarray[$item->id] += $ungradedcount * $item->grademin;
@@ -1567,7 +1567,7 @@ class grade_report_reset extends grade_report {
                 if ($USER->gradeediting[$this->courseid]) {
                     $displaytype = GRADE_DISPLAY_TYPE_REAL;
 
-                } else if ($averagesdisplaytype == GRADE_REPORT_PREFERENCE_INHERIT) { // no ==0 here, please resave the report and user preferences
+                } else if ($averagesdisplaytype == gradereport_PREFERENCE_INHERIT) { // no ==0 here, please resave the report and user preferences
                     $displaytype = $item->get_displaytype();
 
                 } else {
@@ -1575,7 +1575,7 @@ class grade_report_reset extends grade_report {
                 }
 
                 // Override grade_item setting if a display preference (not inherit) was set for the averages
-                if ($averagesdecimalpoints == GRADE_REPORT_PREFERENCE_INHERIT) {
+                if ($averagesdecimalpoints == gradereport_PREFERENCE_INHERIT) {
                     $decimalpoints = $item->get_decimals();
 
                 } else {
