@@ -120,12 +120,12 @@ $report->load_final_grades();
 echo $report->group_selector;
 
 //// User search
-//$url = new moodle_url('/grade/report/grader/index.php', array('id' => $course->id));
-//$firstinitial = $SESSION->gradereport["filterfirstname-{$context->id}"] ?? '';
-//$lastinitial  = $SESSION->gradereport["filtersurname-{$context->id}"] ?? '';
-//$totalusers = $report->get_numusers(true, false);
-//$renderer = $PAGE->get_renderer('core_user');
-//echo $renderer->user_search($url, $firstinitial, $lastinitial, $numusers, $totalusers, $report->currentgroupname);
+$url = new moodle_url('/admin/tool/resetcoursecompletion/participants_grade.php', array('id' => $course->id));
+$firstinitial = $SESSION->gradereport["filterfirstname-{$context->id}"] ?? '';
+$lastinitial  = $SESSION->gradereport["filtersurname-{$context->id}"] ?? '';
+$totalusers = $report->get_numusers(true, false);
+$renderer = $PAGE->get_renderer('core_user');
+echo $renderer->user_search($url, $firstinitial, $lastinitial, $numusers, $totalusers, $report->currentgroupname);
 
 //show warnings if any
 foreach ($warnings as $warning) {

@@ -649,13 +649,10 @@ class grade_report_reset extends gradereport {
         $canseeuserreport = false;
 
 
-
-
-       /////////////////////////edit/////////////////////
         if (get_capability_info('gradereport/'.$CFG->grade_profilereport.':view')) {
             $canseeuserreport = has_capability('gradereport/'.$CFG->grade_profilereport.':view', $this->context);
         }
-//single
+
         $hasuserreportcell = $canseeuserreport;
         $viewfullnames = has_capability('moodle/site:viewfullnames', $this->context);
 
@@ -759,14 +756,17 @@ class grade_report_reset extends gradereport {
                 $a = new stdClass();
                 $a->user = $fullname;
                 $strgradesforuser = get_string('resetgrades', 'tool_resetcoursecompletion', $a);
-                $url = new moodle_url('/admin/tool/resetcoursecompletion/resetconfirm.php');
+            //    $url = new moodle_url('/admin/tool/resetcoursecompletion/resetconfirm.php');
 //                        ['userid' => $user->id, 'id' => $this->course->id]);
 
 //                $userreportcell->text .= $OUTPUT->action_icon($url, new pix_icon('reset', 'Reset', 'resetcoursecompletion/pix'), null,
 //                    ['title' => $strgradesforuser, 'aria-label' => $strgradesforuser]);
 
-                $userreportcell->text .= $OUTPUT->action_icon($url, new pix_icon('reset', 'Reset','tool_resetcoursecompletion' ));
+//                $url = $this->reset_course_grade();
+//                $userreportcell->text .= $OUTPUT->action_icon($url, new pix_icon('reset', 'Reset','tool_resetcoursecompletion' ));
 
+                $url ='#';
+                $userreportcell->text .= $OUTPUT->action_icon($url, new pix_icon('reset', 'Reset','tool_resetcoursecompletion' ));
 
             }
 
@@ -794,6 +794,37 @@ class grade_report_reset extends gradereport {
         }
 
         return $rows;
+    }
+
+
+
+    //Reset Course Grade function
+    public function reset_course_grade (){
+        global $CFG, $DB;
+        $params = array_merge(array('courseid'=>$this->courseid), $this->userselect_params);
+        $sql = "DELETE g.*
+                  FROM {grade_items} gi,
+                       {grade_grades} g
+                 WHERE g.itemid = gi.id AND gi.courseid = :courseid {$this->userselect}";
+
+        $userids = array_keys($this->users);
+        $allgradeitems = $this->get_allgradeitems();
+
+
+        if ($grades = $DB->execute($sql, $params)) {
+            foreach ($grades as $graderec) {
+                $grade = new grade_grade($graderec, false);
+                if (!empty($allgradeitems[$graderec->itemid])) {
+                    // Note: Filter out grades which have a grade type of GRADE_TYPE_NONE.
+                    // Only grades without this type are present in $allgradeitems.
+                    $this->allgrades[$graderec->userid][$graderec->itemid] = $grade;
+                }
+                if (in_array($graderec->userid, $userids) and array_key_exists($graderec->itemid, $this->gtree->get_items())) { // some items may not be present!!
+                    $this->grades[$graderec->userid][$graderec->itemid] = $grade;
+                    $this->grades[$graderec->userid][$graderec->itemid]->grade_item = $this->gtree->get_item($graderec->itemid); // db caching
+                }
+            }
+        }
     }
 
     /**
