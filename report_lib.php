@@ -15,7 +15,7 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * File containing the gradereport class
+ * File containing the grade_report class
  *
  * @package   core_grades
  * @copyright 2007 Moodle Pty Ltd (http://moodle.com)
@@ -29,7 +29,7 @@ require_once($CFG->libdir.'/gradelib.php');
  * @copyright 2007 Moodle Pty Ltd (http://moodle.com)
  * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
-abstract class gradereport {
+abstract class abs_grade_report {
     /**
      * The courseid.
      * @var int $courseid
@@ -189,23 +189,23 @@ abstract class gradereport {
     }
 
     /**
-     * Given the name of a user preference (without gradereport_ prefix), locally saves then returns
+     * Given the name of a user preference (without grade_report_ prefix), locally saves then returns
      * the value of that preference. If the preference has already been fetched before,
      * the saved value is returned. If the preference is not set at the User level, the $CFG equivalent
      * is given (site default).
      * Can be called statically, but then doesn't benefit from caching
-     * @param string $pref The name of the preference (do not include the gradereport_ prefix)
+     * @param string $pref The name of the preference (do not include the grade_report_ prefix)
      * @param int $objectid An optional itemid or categoryid to check for a more fine-grained preference
      * @return mixed The value of the preference
      */
     public function get_pref($pref, $objectid=null) {
         global $CFG;
-        $fullprefname = 'gradereport_' . $pref;
+        $fullprefname = 'grade_report_' . $pref;
         $shortprefname = 'grade_' . $pref;
 
         $retval = null;
 
-        if (!isset($this) OR get_class($this) != 'gradereport') {
+        if (!isset($this) OR get_class($this) != 'grade_report') {
             if (!empty($objectid)) {
                 $retval = get_user_preferences($fullprefname . $objectid, self::get_pref($pref));
             } else if (isset($CFG->$fullprefname)) {
@@ -246,7 +246,7 @@ abstract class gradereport {
      * @return bool Success or failure.
      */
     public function set_pref($pref, $pref_value='default', $itemid=null) {
-        $fullprefname = 'gradereport_' . $pref;
+        $fullprefname = 'grade_report_' . $pref;
         if ($pref_value == 'default') {
             return unset_user_preference($fullprefname.$itemid);
         } else {
@@ -337,8 +337,8 @@ abstract class gradereport {
         if (!empty($selectedusers)) {
             $coursecontext = $this->context->get_course_context(true);
 
-            $defaultgradeshowactiveenrol = !empty($CFG->gradereport_showonlyactiveenrol);
-            $showonlyactiveenrol = get_user_preferences('gradereport_showonlyactiveenrol', $defaultgradeshowactiveenrol);
+            $defaultgradeshowactiveenrol = !empty($CFG->grade_report_showonlyactiveenrol);
+            $showonlyactiveenrol = get_user_preferences('grade_report_showonlyactiveenrol', $defaultgradeshowactiveenrol);
             $showonlyactiveenrol = $showonlyactiveenrol || !has_capability('moodle/course:viewsuspendedusers', $coursecontext);
 
             if ($showonlyactiveenrol) {
@@ -459,12 +459,12 @@ abstract class gradereport {
             $this->showtotalsifcontainhidden = array($courseid => $this->showtotalsifcontainhidden);
         }
 
-        if ($this->showtotalsifcontainhidden[$courseid] == gradereport_SHOW_REAL_TOTAL_IF_CONTAINS_HIDDEN) {
+        if ($this->showtotalsifcontainhidden[$courseid] == GRADE_REPORT_SHOW_REAL_TOTAL_IF_CONTAINS_HIDDEN) {
             return array('grade' => $finalgrade,
-                         'grademin' => $grademin,
-                         'grademax' => $grademax,
-                         'aggregationstatus' => $aggregationstatus,
-                         'aggregationweight' => $aggregationweight);
+                'grademin' => $grademin,
+                'grademax' => $grademax,
+                'aggregationstatus' => $aggregationstatus,
+                'aggregationweight' => $aggregationweight);
         }
 
         // If we've moved on to another course or user, reload the grades.
@@ -501,10 +501,10 @@ abstract class gradereport {
 
         //if the item definitely depends on a hidden item
         if (array_key_exists($course_item->id, $hiding_affected['altered']) ||
-                array_key_exists($course_item->id, $hiding_affected['alteredgrademin']) ||
-                array_key_exists($course_item->id, $hiding_affected['alteredgrademax']) ||
-                array_key_exists($course_item->id, $hiding_affected['alteredaggregationstatus']) ||
-                array_key_exists($course_item->id, $hiding_affected['alteredaggregationweight'])) {
+            array_key_exists($course_item->id, $hiding_affected['alteredgrademin']) ||
+            array_key_exists($course_item->id, $hiding_affected['alteredgrademax']) ||
+            array_key_exists($course_item->id, $hiding_affected['alteredaggregationstatus']) ||
+            array_key_exists($course_item->id, $hiding_affected['alteredaggregationweight'])) {
             if (!$this->showtotalsifcontainhidden[$courseid] && array_key_exists($course_item->id, $hiding_affected['altered'])) {
                 // Hide the grade, but only when it has changed.
                 $finalgrade = null;
@@ -572,8 +572,8 @@ abstract class gradereport {
         // Note it is flawed to call this function directly because
         // the aggregated grade does not make sense without the updated min and max information.
 
-        debugging('gradereport::blank_hidden_total() is deprecated.
-                   Call gradereport::blank_hidden_total_and_adjust_bounds instead.', DEBUG_DEVELOPER);
+        debugging('grade_report::blank_hidden_total() is deprecated.
+                   Call grade_report::blank_hidden_total_and_adjust_bounds instead.', DEBUG_DEVELOPER);
         $result = $this->blank_hidden_total_and_adjust_bounds($courseid, $course_item, $finalgrade);
         return $result['grade'];
     }
