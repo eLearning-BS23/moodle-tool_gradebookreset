@@ -27,11 +27,11 @@ require_once($CFG->libdir.'/tablelib.php');
 
 /**
  * Class providing an API for the grade report building and displaying.
- * @uses gradereport
+ * @uses abs_grade_report
  * @copyright 2007 Nicolas Connault
  * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
-class grade_report_reset extends gradereport {
+class grade_report_reset extends abs_grade_report {
     /**
      * The final grades.
      * @var array $grades
@@ -135,7 +135,7 @@ class grade_report_reset extends gradereport {
         if (empty($CFG->enableoutcomes)) {
             $nooutcomes = false;
         } else {
-            $nooutcomes = get_user_preferences('gradereport_shownooutcomes');
+            $nooutcomes = get_user_preferences('abs_grade_report_shownooutcomes');
         }
 
         // if user report preference set or site report setting set use it, otherwise use course or site setting
@@ -310,9 +310,9 @@ class grade_report_reset extends gradereport {
                         $finalgrade = false;
                         $trimmed = trim($postedvalue);
                         if (empty($trimmed)) {
-                             $feedback = null;
+                            $feedback = null;
                         } else {
-                             $feedback = $postedvalue;
+                            $feedback = $postedvalue;
                         }
                     }
 
@@ -431,8 +431,8 @@ class grade_report_reset extends gradereport {
 
         // Check the status of showing only active enrolments.
         $coursecontext = $this->context->get_course_context(true);
-        $defaultgradeshowactiveenrol = !empty($CFG->gradereport_showonlyactiveenrol);
-        $showonlyactiveenrol = get_user_preferences('gradereport_showonlyactiveenrol', $defaultgradeshowactiveenrol);
+        $defaultgradeshowactiveenrol = !empty($CFG->abs_grade_report_showonlyactiveenrol);
+        $showonlyactiveenrol = get_user_preferences('abs_grade_report_showonlyactiveenrol', $defaultgradeshowactiveenrol);
         $showonlyactiveenrol = $showonlyactiveenrol || !has_capability('moodle/course:viewsuspendedusers', $coursecontext);
 
         // Limit to users with an active enrollment.
@@ -448,7 +448,7 @@ class grade_report_reset extends gradereport {
         // If the user has clicked one of the sort asc/desc arrows.
         if (is_numeric($this->sortitemid)) {
             $params = array_merge(array('gitemid' => $this->sortitemid), $gradebookrolesparams, $this->userwheresql_params,
-                    $this->groupwheresql_params, $enrolledparams, $relatedctxparams);
+                $this->groupwheresql_params, $enrolledparams, $relatedctxparams);
 
             $sortjoin = "LEFT JOIN {grade_grades} g ON g.userid = u.id AND g.itemid = $this->sortitemid";
             $sort = "g.finalgrade $this->sortorder, u.idnumber, u.lastname, u.firstname, u.email";
@@ -520,7 +520,7 @@ class grade_report_reset extends gradereport {
 
                 $time = time();
                 $params = array_merge($uparams, array('estatus' => ENROL_INSTANCE_ENABLED, 'uestatus' => ENROL_USER_ACTIVE,
-                        'courseid' => $coursecontext->instanceid, 'now1' => $time, 'now2' => $time));
+                    'courseid' => $coursecontext->instanceid, 'now1' => $time, 'now2' => $time));
                 $useractiveenrolments = $DB->get_records_sql($sql, $params);
 
                 foreach ($this->users as $user) {
@@ -649,10 +649,13 @@ class grade_report_reset extends gradereport {
         $canseeuserreport = false;
 
 
+
+
+        /////////////////////////edit/////////////////////
         if (get_capability_info('gradereport/'.$CFG->grade_profilereport.':view')) {
             $canseeuserreport = has_capability('gradereport/'.$CFG->grade_profilereport.':view', $this->context);
         }
-
+//single
         $hasuserreportcell = $canseeuserreport;
         $viewfullnames = has_capability('moodle/site:viewfullnames', $this->context);
 
@@ -735,9 +738,9 @@ class grade_report_reset extends gradereport {
 
             $fullname = fullname($user, $viewfullnames);
             $usercell->text = html_writer::link(
-                    new moodle_url('/user/index.php', ['id' => $user->id, 'course' => $this->course->id]),
-                    $usercell->text . $fullname,
-                    ['class' => 'username']
+                new moodle_url('/user/index.php', ['id' => $user->id, 'course' => $this->course->id]),
+                $usercell->text . $fullname,
+                ['class' => 'username']
             );
 
 
@@ -756,17 +759,17 @@ class grade_report_reset extends gradereport {
                 $a = new stdClass();
                 $a->user = $fullname;
                 $strgradesforuser = get_string('resetgrades', 'tool_resetcoursecompletion', $a);
-            //    $url = new moodle_url('/admin/tool/resetcoursecompletion/resetconfirm.php');
+                $url = new moodle_url('/admin/tool/resetcoursecompletion/resetconfirm.php');
 //                        ['userid' => $user->id, 'id' => $this->course->id]);
 
 //                $userreportcell->text .= $OUTPUT->action_icon($url, new pix_icon('reset', 'Reset', 'resetcoursecompletion/pix'), null,
 //                    ['title' => $strgradesforuser, 'aria-label' => $strgradesforuser]);
 
-//                $url = $this->reset_course_grade();
-//                $userreportcell->text .= $OUTPUT->action_icon($url, new pix_icon('reset', 'Reset','tool_resetcoursecompletion' ));
 
-                $url ='#';
+                $url = $this->reset_course_grade();
+//                $url ='#';
                 $userreportcell->text .= $OUTPUT->action_icon($url, new pix_icon('reset', 'Reset','tool_resetcoursecompletion' ));
+
 
             }
 
@@ -798,7 +801,7 @@ class grade_report_reset extends gradereport {
 
 
 
-    //Reset Course Grade function
+//Reset Course Grade function
     public function reset_course_grade (){
         global $CFG, $DB;
         $params = array_merge(array('courseid'=>$this->courseid), $this->userselect_params);
@@ -826,6 +829,8 @@ class grade_report_reset extends gradereport {
             }
         }
     }
+
+
 
     /**
      * Builds and returns the rows that will make up the right part of the grade report
@@ -1044,7 +1049,7 @@ class grade_report_reset extends gradereport {
                     if (!empty($CFG->grade_hiddenasdate) and $grade->get_datesubmitted() and !$item->is_category_item() and !$item->is_course_item()) {
                         // the problem here is that we do not have the time when grade value was modified, 'timemodified' is general modification date for grade_grades records
                         $itemcell->text = "<span class='datesubmitted'>" .
-                                userdate($grade->get_datesubmitted(), $strftimedatetimeshort) . "</span>";
+                            userdate($grade->get_datesubmitted(), $strftimedatetimeshort) . "</span>";
                     } else {
                         $itemcell->text = '-';
                     }
@@ -1139,7 +1144,7 @@ class grade_report_reset extends gradereport {
                             $gradelabel = $fullname . ' ' . $item->get_name(true);
                             $itemcell->text .= html_writer::label(
                                 get_string('useractivitygrade', 'tool_resetcoursecompletion', $gradelabel), $attributes['id'], false,
-                                    array('class' => 'accesshide'));
+                                array('class' => 'accesshide'));
                             $itemcell->text .= html_writer::select($scaleopt, 'grade['.$userid.']['.$item->id.']', $gradeval, array(-1=>$nogradestr), $attributes);
                         } else if (!empty($scale)) {
                             $scales = explode(",", $scale->scale);
@@ -1158,13 +1163,13 @@ class grade_report_reset extends gradereport {
                             $value = format_float($gradeval, $decimalpoints);
                             $gradelabel = $fullname . ' ' . $item->get_name(true);
                             $itemcell->text .= '<label class="accesshide" for="grade_'.$userid.'_'.$item->id.'">'
-                                          .get_string('useractivitygrade', 'tool_resetcoursecompletion', $gradelabel).'</label>';
+                                .get_string('useractivitygrade', 'tool_resetcoursecompletion', $gradelabel).'</label>';
                             $itemcell->text .= '<input size="6" tabindex="' . $tabindices[$item->id]['grade']
-                                          . '" type="text" class="text" title="'. $strgrade .'" name="grade['
-                                          .$userid.'][' .$item->id.']" id="grade_'.$userid.'_'.$item->id.'" value="'.$value.'" />';
+                                . '" type="text" class="text" title="'. $strgrade .'" name="grade['
+                                .$userid.'][' .$item->id.']" id="grade_'.$userid.'_'.$item->id.'" value="'.$value.'" />';
                         } else {
                             $itemcell->text .= "<span class='gradevalue{$hidden}{$gradepass}'>" .
-                                    format_float($gradeval, $decimalpoints) . "</span>";
+                                format_float($gradeval, $decimalpoints) . "</span>";
                         }
                     }
 
@@ -1172,9 +1177,9 @@ class grade_report_reset extends gradereport {
                     if ($showquickfeedback and $grade->is_editable()) {
                         $feedbacklabel = $fullname . ' ' . $item->get_name(true);
                         $itemcell->text .= '<label class="accesshide" for="feedback_'.$userid.'_'.$item->id.'">'
-                                      .get_string('useractivityfeedback', 'tool_resetcoursecompletion', $feedbacklabel).'</label>';
+                            .get_string('useractivityfeedback', 'tool_resetcoursecompletion', $feedbacklabel).'</label>';
                         $itemcell->text .= '<input class="quickfeedback" tabindex="' . $tabindices[$item->id]['feedback'].'" id="feedback_'.$userid.'_'.$item->id
-                                      . '" size="6" title="' . $strfeedback . '" type="text" name="feedback['.$userid.']['.$item->id.']" value="' . s($grade->feedback) . '" />';
+                            . '" size="6" title="' . $strfeedback . '" type="text" name="feedback['.$userid.']['.$item->id.']" value="' . s($grade->feedback) . '" />';
                     }
 
                 } else { // Not editing
@@ -1206,7 +1211,7 @@ class grade_report_reset extends gradereport {
                         }
 
                         $itemcell->text .= "<span class='gradevalue{$hidden}{$gradepass}'>" .
-                                grade_format_gradevalue($gradeval, $item, true, $gradedisplaytype, null) . "</span>";
+                            grade_format_gradevalue($gradeval, $item, true, $gradedisplaytype, null) . "</span>";
                         if ($showanalysisicon) {
                             $itemcell->text .= $this->gtree->get_grade_analysis_icon($grade);
                         }
@@ -1509,8 +1514,8 @@ class grade_report_reset extends gradereport {
 
             // Limit to users with an active enrollment.
             $coursecontext = $this->context->get_course_context(true);
-            $defaultgradeshowactiveenrol = !empty($CFG->gradereport_showonlyactiveenrol);
-            $showonlyactiveenrol = get_user_preferences('gradereport_showonlyactiveenrol', $defaultgradeshowactiveenrol);
+            $defaultgradeshowactiveenrol = !empty($CFG->abs_grade_report_showonlyactiveenrol);
+            $showonlyactiveenrol = get_user_preferences('abs_grade_report_showonlyactiveenrol', $defaultgradeshowactiveenrol);
             $showonlyactiveenrol = $showonlyactiveenrol || !has_capability('moodle/course:viewsuspendedusers', $coursecontext);
             list($enrolledsql, $enrolledparams) = get_enrolled_sql($this->context, '', 0, $showonlyactiveenrol);
 
@@ -1587,7 +1592,7 @@ class grade_report_reset extends gradereport {
                     $ungradedcount = $ungradedcounts[$itemid]->count;
                 }
 
-                if ($meanselection == gradereport_MEAN_GRADED) {
+                if ($meanselection == GRADE_REPORT_MEAN_GRADED) {
                     $meancount = $totalcount - $ungradedcount;
                 } else { // Bump up the sum by the number of ungraded items * grademin
                     $sumarray[$item->id] += $ungradedcount * $item->grademin;
@@ -1598,7 +1603,7 @@ class grade_report_reset extends gradereport {
                 if ($USER->gradeediting[$this->courseid]) {
                     $displaytype = GRADE_DISPLAY_TYPE_REAL;
 
-                } else if ($averagesdisplaytype == gradereport_PREFERENCE_INHERIT) { // no ==0 here, please resave the report and user preferences
+                } else if ($averagesdisplaytype == GRADE_REPORT_PREFERENCE_INHERIT) { // no ==0 here, please resave the report and user preferences
                     $displaytype = $item->get_displaytype();
 
                 } else {
@@ -1606,7 +1611,7 @@ class grade_report_reset extends gradereport {
                 }
 
                 // Override grade_item setting if a display preference (not inherit) was set for the averages
-                if ($averagesdecimalpoints == gradereport_PREFERENCE_INHERIT) {
+                if ($averagesdecimalpoints == GRADE_REPORT_PREFERENCE_INHERIT) {
                     $decimalpoints = $item->get_decimals();
 
                 } else {
@@ -1960,7 +1965,7 @@ class grade_report_reset extends gradereport {
 
         foreach ($extrafields as $field) {
             $fieldlink = html_writer::link(new moodle_url($this->baseurl,
-                    array('sortitemid' => $field)), \core_user\fields::get_display_name($field));
+                array('sortitemid' => $field)), \core_user\fields::get_display_name($field));
             $arrows[$field] = $fieldlink;
 
             if ($field == $this->sortitemid) {
@@ -1984,4 +1989,5 @@ class grade_report_reset extends gradereport {
         return $this->get_pref('studentsperpage');
     }
 }
+
 
