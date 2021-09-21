@@ -766,8 +766,8 @@ class grade_report_reset extends abs_grade_report {
 //                    ['title' => $strgradesforuser, 'aria-label' => $strgradesforuser]);
 
 
-                $url = $this->reset_course_grade();
-//                $url ='#';
+//                $url = $this->reset_course_grade();
+                $url ='#';
                 $userreportcell->text .= $OUTPUT->action_icon($url, new pix_icon('reset', 'Reset','tool_resetcoursecompletion' ));
 
 
