@@ -24,7 +24,7 @@ require_once (__DIR__.'/../../../config.php');
 require_once($CFG->libdir.'/adminlib.php');
 require_once($CFG->libdir.'/gradelib.php');
 require_once($CFG->dirroot.'/'.$CFG->admin.'/tool/resetcoursecompletion/forms/coursefilter.php');
-require_once($CFG->dirroot.'/'.$CFG->admin.'/tool/resetcoursecompletion/classes/external/GetGrades.php');
+require_once($CFG->dirroot.'/'.$CFG->admin.'/tool/resetcoursecompletion/classes/GetGrades.php');
 
 global $DB;
 
