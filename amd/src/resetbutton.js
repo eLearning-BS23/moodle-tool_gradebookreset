@@ -13,7 +13,8 @@ define(['jquery', 'core/ajax', 'core/modal_factory', 'core/modal_events', 'core/
         $('.resetbutton').on('click', function(e) {
             var elementid = $(this).attr('id');
             var array = elementid.split("_");
-            var userid = array[array.length - 1];
+            var userid = array[array.length - 2];
+            var courseid = array[array.length - 1];
             var clickedLink = $(e.currentTarget);
             ModalFactory.create({
                 type: ModalFactory.types.SAVE_CANCEL,
@@ -23,13 +24,12 @@ define(['jquery', 'core/ajax', 'core/modal_factory', 'core/modal_events', 'core/
                 modal.setSaveButtonText('Reset');
                 var root = modal.getRoot();
                 root.on(ModalEvents.save, function () {
-                    var elementid = clickedLink.data('id');
-                    // Do something to delete item
-                    console.log(userid);
+                    //var elementid = clickedLink.data('id');
                     var wsfunction = 'tool_resetcoursecompletion_reset_grades';
                     var params = {
                         'userid': userid,
-                    }
+                        'courseid': courseid,
+                    };
                     var request = {
                         methodname: wsfunction,
                         args: params
