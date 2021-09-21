@@ -766,10 +766,15 @@ class grade_report_reset extends abs_grade_report {
 //                    ['title' => $strgradesforuser, 'aria-label' => $strgradesforuser]);
 
 
-                $url = $this->reset_course_grade();
-//                $url ='#';
-                $userreportcell->text .= $OUTPUT->action_icon($url, new pix_icon('reset', 'Reset','tool_resetcoursecompletion' ));
+                // $url = $this->reset_course_grade();
+//                $userreportcell->text .= $OUTPUT->action_icon($url, new pix_icon('reset', 'Reset','tool_resetcoursecompletion' ));
 
+//                //$url ='#';
+//                $userreportcell->text .= $OUTPUT->action_icon($url,
+//                    new pix_icon('reset', 'Reset','tool_resetcoursecompletion'),
+//                    $this->reset_course_grade());
+                //$userreportcell->text .= "<button id='reset_button_" . $user->id . "' class='resetbutton'>Reset</button>";
+                $userreportcell->text .= "<img src='pix/reset.svg' height='16' width='16' id='reset_button_" . $user->id . "' class='resetbutton'/> ";
 
             }
 
