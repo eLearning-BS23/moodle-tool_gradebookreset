@@ -20,23 +20,18 @@
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
-require_once (__DIR__.'/../../../config.php');
-require_once($CFG->libdir.'/adminlib.php');
-require_once($CFG->libdir.'/gradelib.php');
-require_once($CFG->dirroot.'/'.$CFG->admin.'/tool/resetcoursecompletion/forms/coursefilter.php');
-require_once($CFG->dirroot.'/'.$CFG->admin.'/tool/resetcoursecompletion/classes/GetGrades.php');
+require_once (__DIR__ . '/../../../config.php');
+require_once ($CFG->libdir . '/adminlib.php');
+require_once ($CFG->libdir . '/gradelib.php');
+require_once ($CFG->dirroot . '/' . $CFG->admin . '/tool/resetcoursecompletion/forms/coursefilter.php');
+require_once ($CFG->dirroot . '/' . $CFG->admin . '/tool/resetcoursecompletion/classes/GetGrades.php');
 
 global $DB;
-
 
 $PAGE->set_url('/tool/resetcoursecompletion/index.php');
 $PAGE->set_context(context_system::instance());
 $PAGE->set_title(get_string('resetcoursecompletion', 'tool_resetcoursecompletion'));
 $PAGE->set_heading(get_string('resetcoursecompletion', 'tool_resetcoursecompletion'));
-
-
-echo $OUTPUT-> header();
-
 
 $mform = new coursefilter();
 
@@ -44,21 +39,4 @@ $mform->set_data(array());
 
 $mform->display();
 
-////
-//$stringman = get_string_manager();
-//$strings = $stringman->load_component_strings('tool_coursestatistics', 'en');
-////$PAGE->requires->strings_for_js(array_keys($strings), 'tool_coursestatistics');
-//echo html_writer::start_tag('pre');
-//$grading_info = new GetGrades();
-//print_r($grading_info->getresults());
-//////print_r($grading_info->get_course_eroll_count());
-//print_r($grading_info->execute_sql());
-//echo html_writer::end_tag('pre');
-
-
 echo $OUTPUT->footer();
-
-
-
-
-
