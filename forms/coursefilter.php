@@ -50,7 +50,7 @@
 
     $PAGE->set_url(new moodle_url('/grade/report/grader/index.php', array('id'=>$courseid)));
     $PAGE->requires->yui_module('moodle-resetcoursecompletion_grade-gradereporttable', 'Y.M.resetcoursecompletion_grade.init', null, null, true);
-
+    $PAGE->requires->js_call_amd('tool_resetcoursecompletion/resetbutton', 'init', array());
 // basic access checks
     if (!$course = $DB->get_record('course', array('id' => $courseid))) {
         print_error('invalidcourseid');
