@@ -36,10 +36,16 @@ define(['jquery', 'core/ajax', 'core/modal_factory', 'core/modal_events', 'core/
                     };
                     console.log(request);
                     Ajax.call([request])[0].done(function(data) {
-                        console.log(data);
+
                         if (data.warnings.length < 1) {
-                            // NO; pictureCounter++;
+
+                            console.log("Response");
                             console.log(data);
+                            // Notification.addNotification({
+                            //     message: 'Done!',
+                            //     type: 'success'
+                            // });
+                            window.location.href = 'http://localhost/admin/tool/resetcoursecompletion/index.php';
                         } else {
                             Notification.addNotification({
                                 message: 'Something went wrong!',
