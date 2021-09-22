@@ -45,7 +45,7 @@ define(['jquery', 'core/ajax', 'core/modal_factory', 'core/modal_events', 'core/
                             //     message: 'Done!',
                             //     type: 'success'
                             // });
-                            window.location.href = 'http://localhost/admin/tool/resetcoursecompletion/index.php';
+                            window.location.href = `http://localhost/admin/tool/resetcoursecompletion/index.php?id=${courseid}&submit=Show+Participants`;
                         } else {
                             Notification.addNotification({
                                 message: 'Something went wrong!',
