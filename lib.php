@@ -774,7 +774,7 @@ class grade_report_reset extends abs_grade_report {
 //                    new pix_icon('reset', 'Reset','tool_resetcoursecompletion'),
 //                    $this->reset_course_grade());
                 //$userreportcell->text .= "<button id='reset_button_" . $user->id . "' class='resetbutton'>Reset</button>";
-                $userreportcell->text .= "<img src='pix/reset.svg' height='16' width='16' id='reset_button_" . $user->id . "' class='resetbutton'/> ";
+                $userreportcell->text .= "<img src='pix/reset.svg' height='16' width='16' id='reset_button_" . $user->id . "_" . $this->courseid ."' class='resetbutton'/> ";
 
             }
 
@@ -807,13 +807,15 @@ class grade_report_reset extends abs_grade_report {
 
 
 //Reset Course Grade function
-    public function reset_course_grade (){
-        global $CFG, $DB;
-        $params = array_merge(array('courseid'=>$this->courseid), $this->userselect_params);
+    public function reset_course_grade ($userid){
+        global $CFG, $DB, $PAGE;
+        $params = array_merge(array('courseid'=>$this->courseid, 'userid' => $userid), $this->userselect_params);
         $sql = "DELETE g.*
                   FROM {grade_items} gi,
                        {grade_grades} g
-                 WHERE g.itemid = gi.id AND gi.courseid = :courseid {$this->userselect}";
+                 WHERE g.itemid = gi.id 
+                AND gi.courseid = :courseid {$this->userselect}
+                AND g.userid = :userid";
 
         $userids = array_keys($this->users);
         $allgradeitems = $this->get_allgradeitems();
@@ -833,6 +835,10 @@ class grade_report_reset extends abs_grade_report {
                 }
             }
         }
+
+//        $url = $CFG->wwwroot . '/admin/tool/resetcoursecompletion/index.php';
+//
+//        return redirect($url);
     }
 
 
