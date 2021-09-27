@@ -18,7 +18,7 @@
  * Definition of the grade report class
  *
  * @package   resetcoursecompletion
- * @copyright 2007 Nicolas Connault
+ * @copyright 2021 Brain station 23 ltd <>  {@link https://brainstation-23.com/}
  * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
@@ -648,13 +648,19 @@ class grade_report_reset extends abs_grade_report {
         $showuserimage = $this->get_pref('showuserimage');
         // FIXME: MDL-52678 This get_capability_info is hacky and we should have an API for inserting grade row links instead.
         $canseeuserreport = false;
+        $canseeselectmultiple = false;
 
         /////////////////////////edit/////////////////////
         if (get_capability_info('gradereport/' . $CFG->grade_profilereport . ':view')) {
             $canseeuserreport = has_capability('gradereport/' . $CFG->grade_profilereport . ':view', $this->context);
         }
-//single
-        $hasuserreportcell = $canseeuserreport;
+
+        if (get_capability_info('gradereport/' . $CFG->grade_profilereport . ':view')) {
+            $canseeselectmultiple = has_capability('gradereport/' . $CFG->grade_profilereport . ':view', $this->context);
+        }
+
+
+        $hasuserreportcell = $canseeuserreport || $canseeselectmultiple;
         $viewfullnames = has_capability('moodle/site:viewfullnames', $this->context);
 
         $strfeedback = $this->get_lang_string("feedback");
@@ -718,6 +724,7 @@ class grade_report_reset extends abs_grade_report {
         $suspendedstring = null;
 
         $usercount = 0;
+
         foreach ($this->users as $userid => $user) {
             $userrow = new html_table_row();
             $userrow->id = 'fixed_user_' . $userid;
@@ -741,6 +748,9 @@ class grade_report_reset extends abs_grade_report {
                 ['class' => 'username']
             );
 
+
+
+
             // The browser's scrollbar may partly cover (in certain operative systems) the content in the user cells
             // when horizontally scrolling through the table contents (most noticeable when in RTL mode).
             // Therefore, add slight padding on the left or right when using RTL mode.
@@ -751,7 +761,8 @@ class grade_report_reset extends abs_grade_report {
             $userreportcell = new html_table_cell();
             $userreportcell->attributes['class'] = 'userreport';
             $userreportcell->header = false;
-            /////////
+
+            //single reset button
             if ($canseeuserreport) {
                 $a = new stdClass();
                 $a->user = $fullname;
@@ -775,9 +786,22 @@ class grade_report_reset extends abs_grade_report {
 
             }
 
+            //multiple select checkbox
+            if ($canseeselectmultiple) {
+                $strselectview = get_string('selectview', 'tool_resetcoursecompletion', $fullname);
+                $url = new moodle_url('/admin/tool/resetcoursecompletion/resetconfirm.php');
+//                $selectview = $OUTPUT->action_icon($url, new pix_icon('t/editstring', ''), null,
+//                    ['title' => $strselectview, 'aria-label' => $strselectview]);
+
+                $selectview = "<input type='checkbox' id='select_user_id_" . $user->id . "_" . $this->courseid . "' class='resetselected'
+                                style='margin: -5px 5px 5px 5px;'/>";
+                $userreportcell->text .= $selectview;
+            }
+
             if ($userreportcell->text) {
                 $userrow->cells[] = $userreportcell;
             }
+
 
             foreach ($extrafields as $field) {
                 $fieldcell = new html_table_cell();
@@ -796,9 +820,14 @@ class grade_report_reset extends abs_grade_report {
             $rows = $this->get_left_avg_row($rows, $colspan, true);
             $rows = $this->get_left_avg_row($rows, $colspan);
         }
-
         return $rows;
     }
+
+    public function delete_multiple_button(){
+//        echo "<button id='reset_all_button' class='btn btn-primary' style='margin-right: 3px'>Select All</button>";
+        echo "<button id='reset_multiple_button' class='btn btn-primary' style='margin: -20px 0px 10px 30%;'>Reset Selected</button>";
+    }
+
 
     //Reset Course Grade function
     public function reset_course_grade($userid) {
@@ -829,10 +858,6 @@ class grade_report_reset extends abs_grade_report {
                 }
             }
         }
-
-//        $url = $CFG->wwwroot . '/admin/tool/resetcoursecompletion/index.php';
-        //
-        //        return redirect($url);
     }
 
     /**
@@ -840,8 +865,12 @@ class grade_report_reset extends abs_grade_report {
      * @param boolean $displayaverages whether to display average rows in the table
      * @return array Array of html_table_row objects
      */
+
+
+
     public function get_right_rows($displayaverages) {
         global $CFG, $USER, $OUTPUT, $DB, $PAGE;
+
 
         $rows = array();
         $this->rowcount = 0;
