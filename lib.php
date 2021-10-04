@@ -18,7 +18,7 @@
  * Definition of the grade report class
  *
  * @package   resetcoursecompletion
- * @copyright 2007 Nicolas Connault
+ * @copyright 2021 Brain station 23 ltd <>  {@link https://brainstation-23.com/}
  * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
@@ -28,7 +28,7 @@ require_once ($CFG->libdir . '/tablelib.php');
 /**
  * Class providing an API for the grade report building and displaying.
  * @uses abs_grade_report
- * @copyright 2007 Nicolas Connault
+ * @copyright 2021 Brain station 23 ltd <>  {@link https://brainstation-23.com/}
  * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 class grade_report_reset extends abs_grade_report {
@@ -648,13 +648,19 @@ class grade_report_reset extends abs_grade_report {
         $showuserimage = $this->get_pref('showuserimage');
         // FIXME: MDL-52678 This get_capability_info is hacky and we should have an API for inserting grade row links instead.
         $canseeuserreport = false;
+        $canseeselectmultiple = false;
 
         /////////////////////////edit/////////////////////
         if (get_capability_info('gradereport/' . $CFG->grade_profilereport . ':view')) {
             $canseeuserreport = has_capability('gradereport/' . $CFG->grade_profilereport . ':view', $this->context);
         }
-//single
-        $hasuserreportcell = $canseeuserreport;
+
+        if (get_capability_info('gradereport/' . $CFG->grade_profilereport . ':view')) {
+            $canseeselectmultiple = has_capability('gradereport/' . $CFG->grade_profilereport . ':view', $this->context);
+        }
+
+
+        $hasuserreportcell = $canseeuserreport || $canseeselectmultiple;
         $viewfullnames = has_capability('moodle/site:viewfullnames', $this->context);
 
         $strfeedback = $this->get_lang_string("feedback");
@@ -718,6 +724,7 @@ class grade_report_reset extends abs_grade_report {
         $suspendedstring = null;
 
         $usercount = 0;
+
         foreach ($this->users as $userid => $user) {
             $userrow = new html_table_row();
             $userrow->id = 'fixed_user_' . $userid;
@@ -741,6 +748,9 @@ class grade_report_reset extends abs_grade_report {
                 ['class' => 'username']
             );
 
+
+
+
             // The browser's scrollbar may partly cover (in certain operative systems) the content in the user cells
             // when horizontally scrolling through the table contents (most noticeable when in RTL mode).
             // Therefore, add slight padding on the left or right when using RTL mode.
@@ -751,33 +761,48 @@ class grade_report_reset extends abs_grade_report {
             $userreportcell = new html_table_cell();
             $userreportcell->attributes['class'] = 'userreport';
             $userreportcell->header = false;
-            /////////
-            if ($canseeuserreport) {
-                $a = new stdClass();
-                $a->user = $fullname;
-                $strgradesforuser = get_string('resetgrades', 'tool_resetcoursecompletion', $a);
+
+//            //single reset button
+//            if ($canseeuserreport) {
+//                $a = new stdClass();
+//                $a->user = $fullname;
+//                $strgradesforuser = get_string('resetgrades', 'tool_resetcoursecompletion', $a);
+//                $url = new moodle_url('/admin/tool/resetcoursecompletion/resetconfirm.php');
+//                //['userid' => $user->id, 'id' => $this->course->id]);
+//
+//                //$userreportcell->text .= $OUTPUT->action_icon($url, new pix_icon('reset', 'Reset', 'resetcoursecompletion/pix'), null,
+//                //                    ['title' => $strgradesforuser, 'aria-label' => $strgradesforuser]);
+//
+//                //$url = $this->reset_course_grade();
+//                //$url ='#';
+//                //$userreportcell->text .= $OUTPUT->action_icon($url, new pix_icon('reset', 'Reset','tool_resetcoursecompletion' ));
+//
+//                //$url ='#';
+//                //                $userreportcell->text .= $OUTPUT->action_icon($url,
+//                //                    new pix_icon('reset', 'Reset','tool_resetcoursecompletion'),
+//                //                    $this->reset_course_grade());
+//                //$userreportcell->text .= "<button id='reset_button_" . $user->id . "' class='resetbutton'>Reset</button>";
+//                $userreportcell->text .= "<img src='pix/reset.svg' height='16' width='16' title='Reset Grade' id='reset_button_" . $user->id . "_" . $this->courseid . "' class='resetbutton'/> ";
+//
+//            }
+
+            //multiple select checkbox
+            if ($canseeselectmultiple) {
+                $strselectview = get_string('selectview', 'tool_resetcoursecompletion', $fullname);
                 $url = new moodle_url('/admin/tool/resetcoursecompletion/resetconfirm.php');
-                //['userid' => $user->id, 'id' => $this->course->id]);
+//                $selectview = $OUTPUT->action_icon($url, new pix_icon('t/editstring', ''), null,
+//                    ['title' => $strselectview, 'aria-label' => $strselectview]);
 
-                //$userreportcell->text .= $OUTPUT->action_icon($url, new pix_icon('reset', 'Reset', 'resetcoursecompletion/pix'), null,
-                //                    ['title' => $strgradesforuser, 'aria-label' => $strgradesforuser]);
+//                $selectview = "<input type='checkbox' id='select_user_id_" . $user->id . "_" . $this->courseid . "' class='resetbutton'/>";
+                $selectview = "<input type='checkbox' id='select_user_id_" . $user->id . "_" . $this->courseid . "' />";
 
-                //$url = $this->reset_course_grade();
-                //$url ='#';
-                //$userreportcell->text .= $OUTPUT->action_icon($url, new pix_icon('reset', 'Reset','tool_resetcoursecompletion' ));
-
-                //$url ='#';
-                //                $userreportcell->text .= $OUTPUT->action_icon($url,
-                //                    new pix_icon('reset', 'Reset','tool_resetcoursecompletion'),
-                //                    $this->reset_course_grade());
-                //$userreportcell->text .= "<button id='reset_button_" . $user->id . "' class='resetbutton'>Reset</button>";
-                $userreportcell->text .= "<img src='pix/reset.svg' height='16' width='16' id='reset_button_" . $user->id . "_" . $this->courseid . "' class='resetbutton'/> ";
-
+                $userreportcell->text .= $selectview;
             }
 
             if ($userreportcell->text) {
                 $userrow->cells[] = $userreportcell;
             }
+
 
             foreach ($extrafields as $field) {
                 $fieldcell = new html_table_cell();
@@ -796,9 +821,48 @@ class grade_report_reset extends abs_grade_report {
             $rows = $this->get_left_avg_row($rows, $colspan, true);
             $rows = $this->get_left_avg_row($rows, $colspan);
         }
-
         return $rows;
     }
+
+    public function delete_multiple_button(){
+//        echo "<button id='reset_all_button' class='btn btn-primary' style='margin-right: 3px'>Select All</button>";
+        echo "<button id='reset_multiple_button' class='btn btn-primary resetbutton' style='margin: -20px 0px 10px 30%;'>Reset Selected</button>";
+    }
+
+
+
+    //Reset Course Grade function
+    public function reset_selected_participants_grade($userid) {
+//        global $CFG, $DB, $PAGE;
+//        $params = array_merge(array('courseid' => $this->courseid, 'userid' => $userid), $this->userselect_params);
+//        $sql = "DELETE g.*
+//                  FROM {grade_items} gi,
+//                       {grade_grades} g
+//                 WHERE g.itemid = gi.id
+//                AND gi.courseid = :courseid {$this->userselect}
+//                AND g.userid = :userid";
+//
+//        $userids = array_keys($this->users);
+//        $allgradeitems = $this->get_allgradeitems();
+//
+//        if ($grades = $DB->execute($sql, $params)) {
+//            foreach ($grades as $graderec) {
+//                $grade = new grade_grade($graderec, false);
+//                if (!empty($allgradeitems[$graderec->itemid])) {
+//                    // Note: Filter out grades which have a grade type of GRADE_TYPE_NONE.
+//                    // Only grades without this type are present in $allgradeitems.
+//                    $this->allgrades[$graderec->userid][$graderec->itemid] = $grade;
+//                }
+//                if (in_array($graderec->userid, $userids) and array_key_exists($graderec->itemid, $this->gtree->get_items())) {
+//                    // some items may not be present!!
+//                    $this->grades[$graderec->userid][$graderec->itemid] = $grade;
+//                    $this->grades[$graderec->userid][$graderec->itemid]->grade_item = $this->gtree->get_item($graderec->itemid); // db caching
+//                }
+//            }
+//        }
+    }
+
+
 
     //Reset Course Grade function
     public function reset_course_grade($userid) {
@@ -829,10 +893,6 @@ class grade_report_reset extends abs_grade_report {
                 }
             }
         }
-
-//        $url = $CFG->wwwroot . '/admin/tool/resetcoursecompletion/index.php';
-        //
-        //        return redirect($url);
     }
 
     /**
@@ -840,8 +900,12 @@ class grade_report_reset extends abs_grade_report {
      * @param boolean $displayaverages whether to display average rows in the table
      * @return array Array of html_table_row objects
      */
+
+
+
     public function get_right_rows($displayaverages) {
         global $CFG, $USER, $OUTPUT, $DB, $PAGE;
+
 
         $rows = array();
         $this->rowcount = 0;

@@ -33,6 +33,7 @@ $string['resetcoursecompletion_details'] = 'Choose course name and participant t
 $string['submit'] = 'Show Participants';
 $string['participants'] = 'Reset Participants';
 $string['resetgrades'] = 'Reset Grades of';
+$string['selectview'] = 'Reset Grades of';
 $string['summarygrader'] = 'A table with the names of students in the first column, with assessable activities grouped by course and category across the top.';
 $string['overriddengrade'] = 'Overridden grade';
 $string['useractivitygrade'] = '{$a} grade';

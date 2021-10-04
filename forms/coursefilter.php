@@ -18,7 +18,7 @@
  * Course Filter form
  *
  * @package    tool_resetcoursecompletion
- * @copyright  BS-23
+ * @copyright  2021 Brain station 23 ltd <>  {@link https://brainstation-23.com/}
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
@@ -51,7 +51,8 @@
     $PAGE->set_url(new moodle_url('/grade/report/grader/index.php', array('id'=>$courseid)));
     $PAGE->requires->yui_module('moodle-resetcoursecompletion_grade-gradereporttable', 'Y.M.resetcoursecompletion_grade.init', null, null, true);
     $PAGE->requires->js_call_amd('tool_resetcoursecompletion/resetbutton', 'init', array());
-// basic access checks
+
+    // basic access checks
     if (!$course = $DB->get_record('course', array('id' => $courseid))) {
         print_error('invalidcourseid');
     }
@@ -128,6 +129,7 @@
     $renderer = $PAGE->get_renderer('core_user');
 //    echo $renderer->user_search($url, $firstinitial, $lastinitial, $numusers, $totalusers, $report->currentgroupname);
 
+
 //show warnings if any
     foreach ($warnings as $warning) {
         echo $OUTPUT->notification($warning);
@@ -150,7 +152,6 @@
     if (!empty($studentsperpage) && $studentsperpage >= 20) {
         echo $OUTPUT->paging_bar($numusers, $report->page, $studentsperpage, $report->pbarurl);
     }
-
 
 
 
@@ -226,5 +227,9 @@ if(isset($_GET['submit'])) {
     echo $renderer->user_search($url, $firstinitial, $lastinitial, $numusers, $totalusers, $report->currentgroupname);
     //printing the grade report
     echo $reporthtml;
+    //show multiple sedlect button
+    $report->delete_multiple_button();
+
+
 }
 ?>
