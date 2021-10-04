@@ -833,7 +833,7 @@ class grade_report_reset extends abs_grade_report {
 
     //Reset Course Grade function
     public function reset_selected_participants_grade($userid) {
-        global $CFG, $DB, $PAGE;
+//        global $CFG, $DB, $PAGE;
 //        $params = array_merge(array('courseid' => $this->courseid, 'userid' => $userid), $this->userselect_params);
 //        $sql = "DELETE g.*
 //                  FROM {grade_items} gi,
