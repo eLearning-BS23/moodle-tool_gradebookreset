@@ -227,7 +227,7 @@ if(isset($_GET['submit'])) {
     echo $renderer->user_search($url, $firstinitial, $lastinitial, $numusers, $totalusers, $report->currentgroupname);
     //printing the grade report
     echo $reporthtml;
-    //show multiple sedlect button
+    //show multiple select button
     $report->delete_multiple_button();
 
 
