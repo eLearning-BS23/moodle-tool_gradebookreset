@@ -18,7 +18,7 @@ define(['jquery', 'core/ajax', 'core/modal_factory', 'core/modal_events', 'core/
             // var userid = [];
 
             // console.log(user_elementid);
-            // console.log(elementid);
+             console.log(elementid);
 
             $('.myCheckbox').each(function(k,V){
                 if(V.checked)
@@ -27,7 +27,7 @@ define(['jquery', 'core/ajax', 'core/modal_factory', 'core/modal_events', 'core/
 
                     // var userid = new array(V.value);
                      myArray.push(V.value);
-                     // console.log(myArray);
+                     console.log(myArray);
                 }
             })
 
@@ -39,7 +39,7 @@ define(['jquery', 'core/ajax', 'core/modal_factory', 'core/modal_events', 'core/
             var clickedLink = $(e.currentTarget);
             ModalFactory.create({
                 type: ModalFactory.types.SAVE_CANCEL,
-                title: 'Reset grade',
+                title: 'Reset Grade Confirmation',
                 body: 'Do you really want to reset?',
             }).then(function (modal) {
                 modal.setSaveButtonText('Reset');
@@ -49,7 +49,7 @@ define(['jquery', 'core/ajax', 'core/modal_factory', 'core/modal_events', 'core/
                     var wsfunction = 'tool_resetcoursecompletion_reset_grades';
                     var params = {
                         // 'userid': userid,
-                        'useridArray': myArray,
+                        'useridArray': myArray.join(','),
                         'courseid': courseid,
                     };
                     var request = {
