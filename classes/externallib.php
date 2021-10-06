@@ -42,7 +42,7 @@ class tool_resetcoursecompletion_external extends external_api {
     public static function reset_grades_parameters () {
         return new external_function_parameters(
             array(
-                'userid' => new external_value(PARAM_INT, 'user id'),
+                'useridArray' => new external_value(PARAM_RAW, 'user id Array'),
                 'courseid' => new external_value(PARAM_INT, 'course id'),
             )
         );
@@ -50,7 +50,7 @@ class tool_resetcoursecompletion_external extends external_api {
 
     /**
      * The function itself.
-     * @param int $userid
+     * @param array $useridArray
      * @param int $courseid
      * @return array $response;
      * @throws dml_exception
@@ -58,11 +58,14 @@ class tool_resetcoursecompletion_external extends external_api {
      * @throws moodle_exception
      * @throws required_capability_exception
      */
-    public static function reset_grades($userid, $courseid) {
+    public static function reset_grades($useridArray, $courseid) {
         global $CFG, $DB, $USER;
 
+//        var_dump($useridArray);
+//        die();
+
         $params = array(
-            'userid' => $userid,
+            'useridArray' => $useridArray,
             'courseid' => $courseid,
         );
         // Validate the params.
@@ -132,9 +135,13 @@ class tool_resetcoursecompletion_external extends external_api {
         $obj->load_users();
         $obj->load_final_grades();
 
-        $obj->reset_course_grade($userid);
+//        var_dump($useridArray);
+//        die();
+
+
+        $obj->reset_course_grade($useridArray);
         $response = array(
-            'userid' => $userid,
+            'useridArray' => $useridArray,
             'courseid' => $courseid,
         );
 
@@ -150,7 +157,7 @@ class tool_resetcoursecompletion_external extends external_api {
     public static function reset_grades_returns() {
        return new external_single_structure(
            array(
-               'userid' => new external_value(PARAM_INT, 'id of the created user'),
+               'useridArray' => new external_value(PARAM_RAW, 'id of the selected users'),
                'courseid' => new external_value(PARAM_INT, 'course id'),
                'warnings' => new external_warnings()
            )

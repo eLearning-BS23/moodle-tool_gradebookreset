@@ -8,13 +8,34 @@
 //     });
 //
 // });
+
 define(['jquery', 'core/ajax', 'core/modal_factory', 'core/modal_events', 'core/notification'],
     function($, Ajax, ModalFactory, ModalEvents, Notification) {
         $('.resetbutton').on('click', function(e) {
+            // var user_elementid = $(this).attr('name');
+            var myArray = [];
             var elementid = $(this).attr('id');
+            // var userid = [];
+
+            // console.log(user_elementid);
+            // console.log(elementid);
+
+            $('.myCheckbox').each(function(k,V){
+                if(V.checked)
+                {
+                    // console.log(V.value);
+
+                    // var userid = new array(V.value);
+                     myArray.push(V.value);
+                     // console.log(myArray);
+                }
+            })
+
             var array = elementid.split("_");
-            var userid = array[array.length - 2];
+            // var userid = array[array.length - 2];
             var courseid = array[array.length - 1];
+
+
             var clickedLink = $(e.currentTarget);
             ModalFactory.create({
                 type: ModalFactory.types.SAVE_CANCEL,
@@ -27,7 +48,8 @@ define(['jquery', 'core/ajax', 'core/modal_factory', 'core/modal_events', 'core/
                     //var elementid = clickedLink.data('id');
                     var wsfunction = 'tool_resetcoursecompletion_reset_grades';
                     var params = {
-                        'userid': userid,
+                        // 'userid': userid,
+                        'useridArray': myArray,
                         'courseid': courseid,
                     };
                     var request = {
@@ -58,4 +80,5 @@ define(['jquery', 'core/ajax', 'core/modal_factory', 'core/modal_events', 'core/
                 modal.show();
         });
     });
+
 });
