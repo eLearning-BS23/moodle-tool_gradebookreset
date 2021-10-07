@@ -49,6 +49,9 @@ $ git clone https://github.com/eLearning-BS23/moodle-tool_resetcoursecompletion.
 
 
 ## Configuration
+
+You can install this plugin from [Moodle plugins directory](https://moodle.org/plugins) or can download from [Github](https://github.com/eLearning-BS23/moodle-tool_resetcoursecompletion/).
+
 After installing the plugin, you can use the plugin by following:
 > Select a course name for resetting the course participants grade
 
@@ -65,14 +68,6 @@ After installing the plugin, you can use the plugin by following:
 
 ## Author
 - [Brain Station 23 Ltd.](https://brainstation-23.com)
-
-
-## Issue or Feature Request
-We try our best to deliver bug-free plugins, but we can not test the plugin for every Moodle version. If you find any bug please report it on 
-[GitHub Issue Tracker](https://github.com/eLearning-BS23/moodle-tool_resetcoursecompletion/issues).  Please provide a detailed bug description, including the plugin and Moodle version and, if applicable, a screenshot.
-
-You may also file a request for enhancement on GitHub. 
-If we consider the request generally useful, we might implement it in a future version.
 
 ## License
 This program is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version.
