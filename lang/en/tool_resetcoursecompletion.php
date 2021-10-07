@@ -25,7 +25,7 @@
 
 $string['resetcoursecompletion']  = 'Reset Course Completion';
 $string['pluginname']  = 'Reset Course Completion';
-$string['course_name'] = 'Course Name';
+$string['coursename'] = 'Course Name';
 $string['participant_name'] ='Participants Name';
 $string['Participant_details'] = 'Participants Details';
 $string['submit'] = 'Show Participants';
@@ -38,6 +38,10 @@ $string['useractivitygrade'] = '{$a} grade';
 $string['useractivityfeedback'] = '{$a} feedback';
 $string['resetpermission'] = 'Do you really want to reset?';
 $string['resettitle'] = 'Reset Confirm';
+$string['selectalert'] = 'First select a participant to reset';
+$string['reset'] = 'Reset';
+$string['heading'] = 'Choose course name to see participants grade records';
+$string['resetselected'] = 'Reset Selected';
 
 
 $string['ajaxchoosescale'] = 'Choose';

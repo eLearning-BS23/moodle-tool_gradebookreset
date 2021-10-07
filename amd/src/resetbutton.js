@@ -56,7 +56,13 @@ define([
         console.log(myArray);
         if(myArray.length<=0)
         {
-           alert("Select a user first");
+            str.get_string('selectalert', 'tool_resetcoursecompletion').then(function(langString) {
+                Notification.addNotification({
+                    message: langString,
+                    type: 'error'
+                });
+
+            }).catch(Notification.exception);
         }
 
         else {
@@ -65,7 +71,7 @@ define([
                     title: str.get_string('resettitle','tool_resetcoursecompletion'),
                     body: str.get_string('resetpermission','tool_resetcoursecompletion')
                 }).then(function (modal) {
-                    modal.setSaveButtonText('Reset');
+                    modal.setSaveButtonText(str.get_string('reset','tool_resetcoursecompletion'));
                     var root = modal.getRoot();
                     root.on(ModalEvents.save, function () {
                         var wsfunction = 'tool_resetcoursecompletion_reset_grades';
