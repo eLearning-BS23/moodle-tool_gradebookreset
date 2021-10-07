@@ -14,17 +14,14 @@ YUI.add('moodle-gradereport_grader-gradereporttable', function (Y, NAME) {
 //
 // You should have received a copy of the GNU General Public License
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
-/* eslint-disable no-unused-vars */
 
-/**
- * Grader Report Functionality.
- *
- * @module    moodle-gradereport_grader-gradereporttable
- * @package   gradereport_grader
- * @copyright 2014 UC Regents
- * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
- * @author    Alfonso Roman <aroman@oid.ucla.edu>
- */
+    /**
+     * The Reset Course Completion grade report
+     *
+     * @package   resetcoursecompletion
+     * @copyright 2021 Brain station 23 ltd <>  {@link https://brainstation-23.com/}
+     * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
+     */
 
 /**
  * @module moodle-gradereport_grader-gradereporttable
