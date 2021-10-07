@@ -127,7 +127,6 @@
     $lastinitial  = $SESSION->gradereport["filtersurname-{$context->id}"] ?? '';
     $totalusers = $report->get_numusers(true, false);
     $renderer = $PAGE->get_renderer('core_user');
-//    echo $renderer->user_search($url, $firstinitial, $lastinitial, $numusers, $totalusers, $report->currentgroupname);
 
 
 //show warnings if any
@@ -166,12 +165,17 @@ class coursefilter extends moodleform
         ?>
 
         <form autocomplete="off" method="GET" accept-charset="utf-8" class="mform">
-            <h4>Choose course name to see participants grade records</h4><br><br>
+            <h4>
+                <?php
+                    echo get_string('heading', 'tool_resetcoursecompletion');
+                ?>
+            </h4><br><br>
             <div id="fitem_id_courses" class="form-group row  fitem   ">
                 <div class="col-md-3 col-form-label d-flex pb-0 pr-md-0">
-
                     <label class="d-inline word-break " for="id_courses">
-                        Course Name
+                        <?php
+                            echo get_string('coursename', 'tool_resetcoursecompletion');
+                        ?>
                     </label>
 
                     <div class="form-label-addon d-flex align-items-center align-self-start">
@@ -199,7 +203,11 @@ class coursefilter extends moodleform
                     </div>
                 </div>
                 <div class="col-md-9 form-inline align-items-start felement" data-fieldtype="submit">
-                    <input type="submit" name="submit" class="btn btn-primary" id="id_submit" value="Show Participants">
+                    <input type="submit" name="submit" class="btn btn-primary" id="id_submit"
+                           value="<?php
+                                        echo get_string('submit', 'tool_resetcoursecompletion');
+                                    ?>"
+                    />
                     <div class="form-control-feedback invalid-feedback" id="id_error_submit">
                     </div>
                 </div>

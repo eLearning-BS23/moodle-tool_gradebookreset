@@ -17,13 +17,11 @@ YUI.add('moodle-gradereport_grader-gradereporttable', function (Y, NAME) {
 /* eslint-disable no-unused-vars */
 
 /**
- * Grader Report Functionality.
+ * The Reset Course Completion grade report
  *
- * @module    moodle-gradereport_grader-gradereporttable
- * @package   gradereport_grader
- * @copyright 2014 UC Regents
+ * @package   resetcoursecompletion
+ * @copyright 2021 Brain station 23 ltd <>  {@link https://brainstation-23.com/}
  * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
- * @author    Alfonso Roman <aroman@oid.ucla.edu>
  */
 
 /**
