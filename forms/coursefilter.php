@@ -144,10 +144,6 @@
     $reporthtml = $report->get_grade_table($displayaverages);
 
 
-////printing the grade report
-//    echo $reporthtml;
-
-
 // prints paging bar at bottom for large pages
     if (!empty($studentsperpage) && $studentsperpage >= 20) {
         echo $OUTPUT->paging_bar($numusers, $report->page, $studentsperpage, $report->pbarurl);

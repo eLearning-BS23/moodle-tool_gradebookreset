@@ -30,7 +30,7 @@ require_once($CFG->libdir.'/externallib.php');
  * External class.
  *
  * @package resetcoursecompletion
- * @copyright 2021 Brain Station 23
+ * @copyright 2021 Brain Station 23 ltd
  * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 class tool_resetcoursecompletion_external extends external_api {

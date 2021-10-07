@@ -15,18 +15,19 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * File containing the grade_report class
+ * The Reset Course Completion grade report
  *
- * @package   core_grades
- * @copyright 2007 Moodle Pty Ltd (http://moodle.com)
+ * @package   resetcoursecompletion
+ * @copyright 2021 Brain station 23 ltd <>  {@link https://brainstation-23.com/}
  * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
+
 
 require_once($CFG->libdir.'/gradelib.php');
 
 /**
  * An abstract class containing variables and methods used by all or most reports.
- * @copyright 2007 Moodle Pty Ltd (http://moodle.com)
+ * @copyright 2021 Brain station 23 ltd <>  {@link https://brainstation-23.com/}
  * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 abstract class abs_grade_report {

@@ -12,20 +12,13 @@
 //
 // You should have received a copy of the GNU General Public License
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
-/* eslint-disable no-unused-vars */
 
 /**
- * Grader Report Functionality.
+ * The Reset Course Completion grade report
  *
- * @module    moodle-gradereport_grader-gradereporttable
- * @package   gradereport_grader
- * @copyright 2014 UC Regents
+ * @package   resetcoursecompletion
+ * @copyright 2021 Brain station 23 ltd <>  {@link https://brainstation-23.com/}
  * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
- * @author    Alfonso Roman <aroman@oid.ucla.edu>
- */
-
-/**
- * @module moodle-gradereport_grader-gradereporttable
  */
 
 var SELECTORS = {
