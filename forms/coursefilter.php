@@ -122,7 +122,7 @@
     echo $report->group_selector;
 
 //// User search
-    $url = new moodle_url('/admin/tool/resetcoursecompletion/index.php', array('id' => $course->id));
+    $url = new moodle_url('/admin/tool/resetcoursecompletion/index.php?id=.$course->id.&submit=Show+Participants', array('id' => $course->id));
     $firstinitial = $SESSION->gradereport["filterfirstname-{$context->id}"] ?? '';
     $lastinitial  = $SESSION->gradereport["filtersurname-{$context->id}"] ?? '';
     $totalusers = $report->get_numusers(true, false);
