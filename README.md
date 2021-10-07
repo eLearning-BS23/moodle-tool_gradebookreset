@@ -2,7 +2,16 @@
 
 Moodle Reset Course Completion is an admin tool module plugin, which resets course user’s grades from the gradebook. Multiple users can be selected at once to reset their grades. It resets manually added, hidden, overridden, excluded and locked grades. Even the grades that are associated with activity also gets deleted.
 
+There is a filter for finding participants based on their firstname and surname. Also, there is a pagination option that will be visible if the number of students are equal to or more than twenty.
+
 We are constantly improving the plugin, so stay tuned for upcoming versions.
+
+## Features
+- Filter participants by First name and Surname
+- See all the user’s grades enrolled in a course
+- Selecting one or multiple users to reset their grades
+- Deletes manually added, hidden, overridden, excluded and locked grades including the grades that are associated with activity
+
 
 ## Installation
 
@@ -35,6 +44,9 @@ $ git clone https://github.com/eLearning-BS23/moodle-tool_resetcoursecompletion.
 ## Usages
 1.	Go to Site Administration -> courses -> Reset Course Completion
 2.	Click on this menu item to view the reset course completion page
+
+![View Reset Page](https://user-images.githubusercontent.com/40598386/136340473-d1895838-b642-4441-b8b9-9a2d2d24f79a.png)
+
 
 ## Configuration
 After installing the plugin, you can use the plugin by following:
