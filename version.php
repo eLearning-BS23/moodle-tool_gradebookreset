@@ -25,7 +25,7 @@
 defined('MOODLE_INTERNAL') || die();
 
 $plugin->component = 'tool_resetcoursecompletion'; // Full name of the plugin (used for diagnostics)
-$plugin->release = '1.2.41';
+$plugin->release = 'v1.0.1';
 $plugin->version   = 2021092201; // The current plugin version (Date: YYYYMMDDXX).
 $plugin->requires  = 2021051702; // Requires this Moodle version.
 $plugin->maturity = MATURITY_STABLE;
