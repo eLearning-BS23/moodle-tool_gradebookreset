@@ -36,6 +36,9 @@ $string['summarygrader'] = 'A table with the names of students in the first colu
 $string['overriddengrade'] = 'Overridden grade';
 $string['useractivitygrade'] = '{$a} grade';
 $string['useractivityfeedback'] = '{$a} feedback';
+$string['resetpermission'] = 'Do you really want to reset?';
+$string['resettitle'] = 'Reset Confirm';
+
 
 $string['ajaxchoosescale'] = 'Choose';
 $string['ajaxerror'] = 'Error';
