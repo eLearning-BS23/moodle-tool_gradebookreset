@@ -170,7 +170,7 @@ class coursefilter extends moodleform
         ?>
 
         <form autocomplete="off" method="GET" accept-charset="utf-8" class="mform">
-            <h4>Choose course name and participant to reset his/her course completion records</h4><br><br>
+            <h4>Choose course name to see participants grade records</h4><br><br>
             <div id="fitem_id_courses" class="form-group row  fitem   ">
                 <div class="col-md-3 col-form-label d-flex pb-0 pr-md-0">
 
