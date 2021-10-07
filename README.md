@@ -1,6 +1,6 @@
 # Reset Course Completion
 
-Moodle Reset Course Completion is an admin tool module plugin, which resets course user’s grades from the gradebook. Multiple users can be selected at once to reset their grades. It resets manually added, hidden, overridden, excluded and locked grades. Even the grades that are associated with activity also gets deleted.
+Moodle Reset Course Completion is an admin tool plugin, which resets course user’s grades from the gradebook. Multiple users can be selected at once to reset their grades. It resets manually added, hidden, overridden, excluded and locked grades. Even the grades that are associated with activity also gets deleted.
 
 There is a filter for finding participants based on their firstname and surname. Also, there is a pagination option that will be visible if the number of students are equal to or more than twenty.
 
@@ -10,7 +10,7 @@ We are constantly improving the plugin, so stay tuned for upcoming versions.
 - Filter participants by First name and Surname
 - See all the user’s grades enrolled in a course
 - Selecting one or multiple users to reset their grades
-- Deletes manually added, hidden, overridden, excluded and locked grades including the grades that are associated with activity
+- Deletes manually added, hidden, overridden, excluded and locked grades including the grades that are associated with an activity
 
 
 ## Installation
@@ -57,14 +57,13 @@ After installing the plugin, you can use the plugin by following:
 
 ![Choosing Course](https://user-images.githubusercontent.com/40598386/136337871-819784a7-eb54-477b-87f3-12a3abab8757.png)
 
-> Choose the participants whose grades you want to reset. You can choose as many as you want to.
+> Choose the participants whose grades you want to reset. You can choose as many as you want to
 
 ![Select Multiple Users](https://user-images.githubusercontent.com/40598386/136338285-5e3ef37b-b45d-4547-8094-c804ec4ee7d7.png)
 
-> Give a confirmation for resetting the grades.
+> Give a confirmation for resetting the grades
 
 ![Confirm Reset](https://user-images.githubusercontent.com/40598386/136338481-2e71b05c-a264-4272-b8a3-3eae7106637f.png)
-
 
 ## Author
 - [Brain Station 23 Ltd.](https://brainstation-23.com)
