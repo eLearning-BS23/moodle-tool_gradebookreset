@@ -1,6 +1,6 @@
 # Grade Book Reset
 
-Moodle Grade Book Reset is an admin tool plugin, which resets course user’s grades from the gradebook. Multiple users can be selected at once to reset their grades. It resets manually added, hidden, overridden, excluded and locked grades. Even the grades that are associated with activity also gets deleted.
+Moodle Grade Book Reset is a Moodle Admin Tool plugin, which resets course user’s grades from the gradebook. Multiple users can be selected at once to reset their grades. It resets manually added, hidden, overridden, excluded and locked grades. Even the grades that are associated with activity also gets deleted.
 
 There is a filter for finding participants based on their first name and surname. Also, there is a pagination option that will be visible if the number of students is equal to or more than twenty.
 
