@@ -17,8 +17,8 @@
 /**
  * Grader report viewed event.
  *
- * @package    gradereport_grader
- * @copyright  2014 Adrian Greeve <adrian@moodle.com>
+ * @package    gradebookreset
+ * @copyright  22021 Brain station 23 ltd <>  {@link https://brainstation-23.com/}
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
@@ -29,9 +29,8 @@ defined('MOODLE_INTERNAL') || die();
 /**
  * Grader report viewed event class.
  *
- * @package    gradereport_grader
- * @since      Moodle 2.8
- * @copyright  2014 Adrian Greeve <adrian@moodle.com>
+ * @package    gradebookreset
+ * @copyright  22021 Brain station 23 ltd <>  {@link https://brainstation-23.com/}
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 class grade_report_viewed extends \core\event\grade_report_viewed {
@@ -42,6 +41,6 @@ class grade_report_viewed extends \core\event\grade_report_viewed {
      * @return string
      */
     public static function get_name() {
-        return get_string('pluginname', 'tool_resetcoursecompletion');
+        return get_string('pluginname', 'tool_gradebookreset');
     }
 }

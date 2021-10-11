@@ -15,7 +15,7 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * @package    tool_resetcoursecompletion
+ * @package    tool_gradebookreset
  * @copyright  2021 Brain station 23 ltd <>  {@link https://brainstation-23.com/}
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
@@ -23,15 +23,15 @@
 require_once (__DIR__ . '/../../../config.php');
 require_once ($CFG->libdir . '/adminlib.php');
 require_once ($CFG->libdir . '/gradelib.php');
-require_once ($CFG->dirroot . '/' . $CFG->admin . '/tool/resetcoursecompletion/forms/coursefilter.php');
-require_once ($CFG->dirroot . '/' . $CFG->admin . '/tool/resetcoursecompletion/classes/GetGrades.php');
+require_once ($CFG->dirroot . '/' . $CFG->admin . '/tool/gradebookreset/forms/coursefilter.php');
+require_once ($CFG->dirroot . '/' . $CFG->admin . '/tool/gradebookreset/classes/GetGrades.php');
 
 global $DB;
 
-$PAGE->set_url('/tool/resetcoursecompletion/index.php');
+$PAGE->set_url('/tool/gradebookreset/index.php');
 $PAGE->set_context(context_system::instance());
-$PAGE->set_title(get_string('resetcoursecompletion', 'tool_resetcoursecompletion'));
-$PAGE->set_heading(get_string('resetcoursecompletion', 'tool_resetcoursecompletion'));
+$PAGE->set_title(get_string('gradebookreset', 'tool_gradebookreset'));
+$PAGE->set_heading(get_string('gradebookreset', 'tool_gradebookreset'));
 
 $mform = new coursefilter();
 

@@ -15,19 +15,19 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * Privacy Subsystem implementation for tool_resetcoursecompletion.
+ * Privacy Subsystem implementation for tool_gradebookreset.
  *
- * @package    tool_resetcoursecompletion
+ * @package    tool_gradebookreset
  * @copyright  22021 Brain station 23 ltd <>  {@link https://brainstation-23.com/}
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
-namespace tool_resetcoursecompletion\privacy;
+namespace tool_gradebookreset\privacy;
 
 defined('MOODLE_INTERNAL') || die();
 
 /**
- * Privacy Subsystem for tool_resetcoursecompletion implementing null_provider.
+ * Privacy Subsystem for tool_gradebookreset implementing null_provider.
  *
  * @copyright  22021 Brain station 23 ltd <>  {@link https://brainstation-23.com/}
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later

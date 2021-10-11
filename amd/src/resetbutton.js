@@ -16,7 +16,7 @@
 /**
  *  The Reset Course Completion grade report
  *
- * @module     tool_resetcoursecompletion
+ * @module     tool_gradebookreset
  * @copyright  2021 Brain station 23 ltd <>  {@link https://brainstation-23.com/}
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
@@ -56,7 +56,7 @@ define([
         console.log(myArray);
         if(myArray.length<=0)
         {
-            str.get_string('selectalert', 'tool_resetcoursecompletion').then(function(langString) {
+            str.get_string('selectalert', 'tool_gradebookreset').then(function(langString) {
                 Notification.addNotification({
                     message: langString,
                     type: 'error'
@@ -68,13 +68,13 @@ define([
         else {
                 ModalFactory.create({
                     type: ModalFactory.types.SAVE_CANCEL,
-                    title: str.get_string('resettitle','tool_resetcoursecompletion'),
-                    body: str.get_string('resetpermission','tool_resetcoursecompletion')
+                    title: str.get_string('resettitle','tool_gradebookreset'),
+                    body: str.get_string('resetpermission','tool_gradebookreset')
                 }).then(function (modal) {
-                    modal.setSaveButtonText(str.get_string('reset','tool_resetcoursecompletion'));
+                    modal.setSaveButtonText(str.get_string('reset','tool_gradebookreset'));
                     var root = modal.getRoot();
                     root.on(ModalEvents.save, function () {
-                        var wsfunction = 'tool_resetcoursecompletion_reset_grades';
+                        var wsfunction = 'tool_gradebookreset_reset_grades';
                         var params = {
                             'useridArray': myArray.join(','),
                             'courseid': courseid,
@@ -90,7 +90,7 @@ define([
 
                                 console.log("Response");
                                 console.log(data);
-                                // window.location.href = `http://localhost/moodle/admin/tool/resetcoursecompletion/index.php?id=${courseid}&submit=Show+Participants`;
+                                // window.location.href = `http://localhost/moodle/admin/tool/gradebookreset/index.php?id=${courseid}&submit=Show+Participants`;
                                 window.location.href = $(location).attr('href');
 
 
