@@ -17,7 +17,7 @@
 /**
  * The Reset Course Completion grade report
  *
- * @package   resetcoursecompletion
+ * @package   gradebookreset
  * @copyright 2021 Brain station 23 ltd <>  {@link https://brainstation-23.com/}
  * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
@@ -25,10 +25,10 @@
 defined('MOODLE_INTERNAL') || die;
 
 $functions = array(
-    'tool_resetcoursecompletion_reset_grades' => array(
-        'classname' => 'tool_resetcoursecompletion_external',
+    'tool_gradebookreset_reset_grades' => array(
+        'classname' => 'tool_gradebookreset_external',
         'methodname' => 'reset_grades',
-        'classpath'   => 'admin/tool/resetcoursecompletion/classes/externallib.php',
+        'classpath'   => 'admin/tool/gradebookreset/classes/externallib.php',
         'description' => 'Call the reset course grade function.',
         'type' => 'write',
         'ajax'        => true,

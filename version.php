@@ -17,14 +17,14 @@
 /**
  * Version details.
  *
- * @package    tool_resetcoursecompletion
+ * @package    tool_gradebookreset
  * @copyright  2021 Brain station 23 ltd <>  {@link https://brainstation-23.com/}
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
 defined('MOODLE_INTERNAL') || die();
 
-$plugin->component = 'tool_resetcoursecompletion'; // Full name of the plugin (used for diagnostics)
+$plugin->component = 'tool_gradebookreset'; // Full name of the plugin (used for diagnostics)
 $plugin->release = 'v1.0.1';
 $plugin->version   = 2021092201; // The current plugin version (Date: YYYYMMDDXX).
 $plugin->requires  = 2021051702; // Requires this Moodle version.

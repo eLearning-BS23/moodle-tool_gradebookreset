@@ -17,12 +17,12 @@
 /**
  * Definition of the grade report class
  *
- * @package   resetcoursecompletion
+ * @package   gradebookreset
  * @copyright 2021 Brain station 23 ltd <>  {@link https://brainstation-23.com/}
  * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
-require_once ($CFG->dirroot . '/admin/tool/resetcoursecompletion/report_lib.php');
+require_once ($CFG->dirroot . '/admin/tool/gradebookreset/report_lib.php');
 require_once ($CFG->libdir . '/tablelib.php');
 
 /**
@@ -762,8 +762,8 @@ class grade_report_reset extends abs_grade_report {
 
             //multiple select checkbox
             if ($canseeselectmultiple) {
-                $strselectview = get_string('selectview', 'tool_resetcoursecompletion', $fullname);
-                $url = new moodle_url('/admin/tool/resetcoursecompletion/resetconfirm.php');
+                $strselectview = get_string('selectview', 'tool_gradebookreset', $fullname);
+                $url = new moodle_url('/admin/tool/gradebookreset/resetconfirm.php');
                 $selectview = "<input type='checkbox' class='myCheckbox' name='myCheckbox' value='$user->id' />";
 
                 $userreportcell->text .= $selectview;
@@ -796,7 +796,7 @@ class grade_report_reset extends abs_grade_report {
 
     public function delete_multiple_button(){
         echo "<button class='btn btn-primary resetbutton' id='select_course_id_" . $this->courseid . "' style='margin: -20px 0px 10px 30%;'>";
-        echo get_string('resetselected', 'tool_resetcoursecompletion');
+        echo get_string('resetselected', 'tool_gradebookreset');
         echo "</button>";
     }
 
@@ -1075,7 +1075,7 @@ class grade_report_reset extends abs_grade_report {
                 }
                 if ($grade->is_overridden()) {
                     $itemcell->attributes['class'] .= ' overridden';
-                    $itemcell->attributes['aria-label'] = get_string('overriddengrade', 'tool_resetcoursecompletion');
+                    $itemcell->attributes['aria-label'] = get_string('overriddengrade', 'tool_gradebookreset');
                 }
 
                 if (!empty($grade->feedback)) {
@@ -1148,7 +1148,7 @@ class grade_report_reset extends abs_grade_report {
                             $attributes = array('tabindex' => $tabindices[$item->id]['grade'], 'id' => 'grade_' . $userid . '_' . $item->id);
                             $gradelabel = $fullname . ' ' . $item->get_name(true);
                             $itemcell->text .= html_writer::label(
-                                get_string('useractivitygrade', 'tool_resetcoursecompletion', $gradelabel), $attributes['id'], false,
+                                get_string('useractivitygrade', 'tool_gradebookreset', $gradelabel), $attributes['id'], false,
                                 array('class' => 'accesshide'));
                             $itemcell->text .= html_writer::select($scaleopt, 'grade[' . $userid . '][' . $item->id . ']', $gradeval, array(-1 => $nogradestr), $attributes);
                         } else if (!empty($scale)) {
@@ -1169,7 +1169,7 @@ class grade_report_reset extends abs_grade_report {
                             $value = format_float($gradeval, $decimalpoints);
                             $gradelabel = $fullname . ' ' . $item->get_name(true);
                             $itemcell->text .= '<label class="accesshide" for="grade_' . $userid . '_' . $item->id . '">'
-                            . get_string('useractivitygrade', 'tool_resetcoursecompletion', $gradelabel) . '</label>';
+                            . get_string('useractivitygrade', 'tool_gradebookreset', $gradelabel) . '</label>';
                             $itemcell->text .= '<input size="6" tabindex="' . $tabindices[$item->id]['grade']
                             . '" type="text" class="text" title="' . $strgrade . '" name="grade['
                             . $userid . '][' . $item->id . ']" id="grade_' . $userid . '_' . $item->id . '" value="' . $value . '" />';
@@ -1183,7 +1183,7 @@ class grade_report_reset extends abs_grade_report {
                     if ($showquickfeedback and $grade->is_editable()) {
                         $feedbacklabel = $fullname . ' ' . $item->get_name(true);
                         $itemcell->text .= '<label class="accesshide" for="feedback_' . $userid . '_' . $item->id . '">'
-                        . get_string('useractivityfeedback', 'tool_resetcoursecompletion', $feedbacklabel) . '</label>';
+                        . get_string('useractivityfeedback', 'tool_gradebookreset', $feedbacklabel) . '</label>';
                         $itemcell->text .= '<input class="quickfeedback" tabindex="' . $tabindices[$item->id]['feedback'] . '" id="feedback_' . $userid . '_' . $item->id
                         . '" size="6" title="' . $strfeedback . '" type="text" name="feedback[' . $userid . '][' . $item->id . ']" value="' . s($grade->feedback) . '" />';
                     }
@@ -1259,13 +1259,13 @@ class grade_report_reset extends abs_grade_report {
         $jsarguments['cfg']['showquickfeedback'] = (bool) $showquickfeedback;
 
         $module = array(
-            'name' => 'resetcoursecompletion',
-            'fullpath' => '/admin/tool/resetcoursecompletion/assets/module.js',
+            'name' => 'gradebookreset',
+            'fullpath' => '/admin/tool/gradebookreset/assets/module.js',
             'requires' => array('base', 'dom', 'event', 'event-mouseenter', 'event-key', 'io-queue', 'json-parse', 'overlay'),
         );
         $PAGE->requires->js_init_call('M.gradereport_grader.init_report', $jsarguments, false, $module);
         $PAGE->requires->strings_for_js(array('addfeedback', 'feedback', 'grade'), 'grades');
-        $PAGE->requires->strings_for_js(array('ajaxchoosescale', 'ajaxclicktoclose', 'ajaxerror', 'ajaxfailedupdate', 'ajaxfieldchanged'), 'tool_resetcoursecompletion');
+        $PAGE->requires->strings_for_js(array('ajaxchoosescale', 'ajaxclicktoclose', 'ajaxerror', 'ajaxfailedupdate', 'ajaxfieldchanged'), 'tool_gradebookreset');
         if (!$enableajax && $USER->gradeediting[$this->courseid]) {
             $PAGE->requires->js_call_amd('core_form/changechecker', 'watchFormById', ['gradereport_grader']);
         }
@@ -1297,7 +1297,7 @@ class grade_report_reset extends abs_grade_report {
         $fulltable = new html_table();
         $fulltable->attributes['class'] = 'resetcourse-grade-table';
         $fulltable->id = 'reset-user-grades';
-        $fulltable->caption = get_string('summarygrader', 'tool_resetcoursecompletion');
+        $fulltable->caption = get_string('summarygrader', 'tool_gradebookreset');
         $fulltable->captionhide = true;
 
         // Extract rows from each side (left and right) and collate them into one row each

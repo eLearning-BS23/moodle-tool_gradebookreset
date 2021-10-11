@@ -19,10 +19,10 @@
  * Link to CSV user upload
  *
  * @package    tool
- * @subpackage resetcoursecompletion
+ * @subpackage gradebookreset
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
 defined('MOODLE_INTERNAL') || die;
 
-$ADMIN->add('courses', new admin_externalpage('resetcoursecompletion', get_string('resetcoursecompletion', 'tool_resetcoursecompletion'), "$CFG->wwwroot/$CFG->admin/tool/resetcoursecompletion/index.php"));
+$ADMIN->add('courses', new admin_externalpage('gradebookreset', get_string('gradebookreset', 'tool_gradebookreset'), "$CFG->wwwroot/$CFG->admin/tool/gradebookreset/index.php"));

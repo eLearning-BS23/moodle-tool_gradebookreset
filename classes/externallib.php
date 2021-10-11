@@ -17,7 +17,7 @@
 /**
  * The Reset Course Completion grade report
  *
- * @package   resetcoursecompletion
+ * @package   gradebookreset
  * @copyright 2021 Brain station 23 ltd <>  {@link https://brainstation-23.com/}
  * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
@@ -29,11 +29,11 @@ require_once($CFG->libdir.'/externallib.php');
 /**
  * External class.
  *
- * @package resetcoursecompletion
+ * @package gradebookreset
  * @copyright 2021 Brain Station 23 ltd
  * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
-class tool_resetcoursecompletion_external extends external_api {
+class tool_gradebookreset_external extends external_api {
     /**
      * Returns description of method parameters.
      *
@@ -76,7 +76,7 @@ class tool_resetcoursecompletion_external extends external_api {
         require_once($CFG->libdir.'/gradelib.php');
         require_once($CFG->dirroot.'/user/renderer.php');
         require_once($CFG->dirroot.'/grade/lib.php');
-        require_once($CFG->dirroot.'/admin/tool/resetcoursecompletion/lib.php');
+        require_once($CFG->dirroot.'/admin/tool/gradebookreset/lib.php');
 
         // basic access checks
         if (!$course = $DB->get_record('course', array('id' => $courseid))) {
@@ -101,7 +101,7 @@ class tool_resetcoursecompletion_external extends external_api {
         $gpr = new grade_plugin_return(
             array(
                 'type' => 'report',
-                'plugin' => 'resetcoursecompletion',
+                'plugin' => 'gradebookreset',
                 'course' => $course,
                 'page' => 0,
             )

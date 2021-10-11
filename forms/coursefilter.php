@@ -17,7 +17,7 @@
 /**
  * Course Filter form
  *
- * @package    tool_resetcoursecompletion
+ * @package    tool_gradebookreset
  * @copyright  2021 Brain station 23 ltd <>  {@link https://brainstation-23.com/}
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
@@ -27,7 +27,7 @@
     require_once($CFG->libdir.'/gradelib.php');
     require_once($CFG->dirroot.'/user/renderer.php');
     require_once($CFG->dirroot.'/grade/lib.php');
-    require_once($CFG->dirroot.'/admin/tool/resetcoursecompletion/lib.php');
+    require_once($CFG->dirroot.'/admin/tool/gradebookreset/lib.php');
     require_once("$CFG->libdir/formslib.php");
 
 
@@ -49,8 +49,8 @@
 
 
     $PAGE->set_url(new moodle_url('/grade/report/grader/index.php', array('id'=>$courseid)));
-    $PAGE->requires->yui_module('moodle-resetcoursecompletion_grade-gradereporttable', 'Y.M.resetcoursecompletion_grade.init', null, null, true);
-    $PAGE->requires->js_call_amd('tool_resetcoursecompletion/resetbutton', 'init', array());
+    $PAGE->requires->yui_module('moodle-gradebookreset_grade-gradereporttable', 'Y.M.gradebookreset_grade.init', null, null, true);
+    $PAGE->requires->js_call_amd('tool_gradebookreset/resetbutton', 'init', array());
 
     // basic access checks
     if (!$course = $DB->get_record('course', array('id' => $courseid))) {
@@ -74,7 +74,7 @@
     $gpr = new grade_plugin_return(
         array(
             'type' => 'report',
-            'plugin' => 'resetcoursecompletion',
+            'plugin' => 'gradebookreset',
             'course' => $course,
             'page' => $page
         )
@@ -106,7 +106,7 @@
 
     $gradeserror = array();
 
-    $reportname = get_string('pluginname', 'tool_resetcoursecompletion');
+    $reportname = get_string('pluginname', 'tool_gradebookreset');
 
     echo $OUTPUT->header();
     echo "<h1>".$reportname."</h1>";
@@ -122,7 +122,7 @@
     echo $report->group_selector;
 
 //// User search
-    $url = new moodle_url('/admin/tool/resetcoursecompletion/index.php?id=.$course->id.&submit=Show+Participants', array('id' => $course->id));
+    $url = new moodle_url('/admin/tool/gradebookreset/index.php?id=.$course->id.&submit=Show+Participants', array('id' => $course->id));
     $firstinitial = $SESSION->gradereport["filterfirstname-{$context->id}"] ?? '';
     $lastinitial  = $SESSION->gradereport["filtersurname-{$context->id}"] ?? '';
     $totalusers = $report->get_numusers(true, false);
@@ -167,14 +167,14 @@ class coursefilter extends moodleform
         <form autocomplete="off" method="GET" accept-charset="utf-8" class="mform">
             <h4>
                 <?php
-                    echo get_string('heading', 'tool_resetcoursecompletion');
+                    echo get_string('heading', 'tool_gradebookreset');
                 ?>
             </h4><br><br>
             <div id="fitem_id_courses" class="form-group row  fitem   ">
                 <div class="col-md-3 col-form-label d-flex pb-0 pr-md-0">
                     <label class="d-inline word-break " for="id_courses">
                         <?php
-                            echo get_string('coursename', 'tool_resetcoursecompletion');
+                            echo get_string('coursename', 'tool_gradebookreset');
                         ?>
                     </label>
 
@@ -205,7 +205,7 @@ class coursefilter extends moodleform
                 <div class="col-md-9 form-inline align-items-start felement" data-fieldtype="submit">
                     <input type="submit" name="submit" class="btn btn-primary" id="id_submit"
                            value="<?php
-                                        echo get_string('submit', 'tool_resetcoursecompletion');
+                                        echo get_string('submit', 'tool_gradebookreset');
                                     ?>"
                     />
                     <div class="form-control-feedback invalid-feedback" id="id_error_submit">

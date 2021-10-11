@@ -15,16 +15,16 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * Strings for component 'tool_resetcoursecompletion', language 'en', branch 'MOODLE_22_STABLE'
+ * Strings for component 'tool_gradebookreset', language 'en', branch 'MOODLE_22_STABLE'
  *
  * @package    tool
- * @subpackage resetcoursecompletion
+ * @subpackage gradebookreset
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
 
-$string['resetcoursecompletion']  = 'Reset Course Completion';
-$string['pluginname']  = 'Reset Course Completion';
+$string['gradebookreset']  = 'Grade Book Reset';
+$string['pluginname']  = 'Grade Book Reset';
 $string['coursename'] = 'Course Name';
 $string['participant_name'] ='Participants Name';
 $string['Participant_details'] = 'Participants Details';
