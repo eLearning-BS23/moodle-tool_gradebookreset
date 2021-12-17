@@ -25,7 +25,7 @@
 defined('MOODLE_INTERNAL') || die();
 
 $plugin->component = 'tool_gradebookreset'; // Full name of the plugin (used for diagnostics).
-$plugin->release = 'v1.0.2';
-$plugin->version   = 2021121600; // The current plugin version (Date: YYYYMMDDXX).
+$plugin->release = 'v1.0.3';
+$plugin->version   = 2021121701; // The current plugin version (Date: YYYYMMDDXX).
 $plugin->requires  = 2021051702; // Requires this Moodle version.
 $plugin->maturity = MATURITY_STABLE;
