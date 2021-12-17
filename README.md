@@ -44,7 +44,7 @@ $ git clone https://github.com/eLearning-BS23/moodle-tool_gradebookreset.git
 ## Usages
 1.	Go to Site Administration -> Grades -> Grade Book Reset
 2.	Click on this menu item to view the grade book reset page
-
+From the index page the a particular course can be selected and then you can select specific participants to reset their grades. 
 ![settings](https://user-images.githubusercontent.com/40598386/136807424-355e7298-c867-433c-88d9-5dc550e0c834.png)
 
 
