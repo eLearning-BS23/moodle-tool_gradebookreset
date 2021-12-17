@@ -24,6 +24,8 @@
 
 
 defined('MOODLE_INTERNAL') || die;
+
+global $CFG;
 require_once($CFG->libdir.'/externallib.php');
 
 /**
@@ -59,10 +61,7 @@ class tool_gradebookreset_external extends external_api {
      * @throws required_capability_exception
      */
     public static function reset_grades($useridArray, $courseid) {
-        global $CFG, $DB, $USER;
-
-//        var_dump($useridArray);
-//        die();
+        global $CFG, $DB, $USER, $SESSION;
 
         $params = array(
             'useridArray' => $useridArray,
@@ -71,19 +70,17 @@ class tool_gradebookreset_external extends external_api {
         // Validate the params.
         self::validate_parameters(self::reset_grades_parameters(), $params);
 
-        // TODO: Call reset_course_grade() from lib.php
+        // TODO: Call reset_course_grade() from lib.php.
 
         require_once($CFG->libdir.'/gradelib.php');
         require_once($CFG->dirroot.'/user/renderer.php');
         require_once($CFG->dirroot.'/grade/lib.php');
         require_once($CFG->dirroot.'/admin/tool/gradebookreset/lib.php');
 
-        // basic access checks
+        // Basic access checks.
         if (!$course = $DB->get_record('course', array('id' => $courseid))) {
             print_error('invalidcourseid');
         }
-
-        //require_login($course);
         $context = context_course::instance($course->id);
 
         // The report object is recreated each time, save search information to SESSION object for future use.
@@ -97,7 +94,7 @@ class tool_gradebookreset_external extends external_api {
         require_capability('gradereport/grader:view', $context);
         require_capability('moodle/grade:viewall', $context);
 
-        // return tracking object
+        // Return tracking object.
         $gpr = new grade_plugin_return(
             array(
                 'type' => 'report',
@@ -107,13 +104,12 @@ class tool_gradebookreset_external extends external_api {
             )
         );
         $edit = -1;
-// last selected report session tracking
+
+        // Last selected report session tracking.
         if (!isset($USER->grade_last_report)) {
             $USER->grade_last_report = array();
         }
         $USER->grade_last_report[$course->id] = 'grader';
-
-
 
         if (has_capability('moodle/grade:edit', $context)) {
             if (!isset($USER->gradeediting[$course->id])) {
@@ -135,16 +131,11 @@ class tool_gradebookreset_external extends external_api {
         $obj->load_users();
         $obj->load_final_grades();
 
-//        var_dump($useridArray);
-//        die();
-
-
         $obj->reset_course_grade($useridArray);
         $response = array(
             'useridArray' => $useridArray,
             'courseid' => $courseid,
         );
-
 
         $response['warnings'] = [];
         return $response;
@@ -161,6 +152,6 @@ class tool_gradebookreset_external extends external_api {
                'courseid' => new external_value(PARAM_INT, 'course id'),
                'warnings' => new external_warnings()
            )
-       );
+        );
     }
 }
