@@ -127,7 +127,7 @@ if (isset($graderreportsilast)) {
     $lastinitial  = $SESSION->gradereport["filtersurname-{$context->id}"] ?? '';
     $totalusers = $report->get_numusers(true, false);
     $renderer = $PAGE->get_renderer('core_user');
-    
+
     $displayaverages = true;
     if ($numusers == 0) {
         $displayaverages = false;
@@ -144,7 +144,6 @@ if (isset($graderreportsilast)) {
     class coursefilter extends moodleform
     {
             // Add elements to form.
-
         /**
          * @throws dml_exception
          */
