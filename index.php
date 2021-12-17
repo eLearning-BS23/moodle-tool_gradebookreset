@@ -20,13 +20,14 @@
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
-require_once (__DIR__ . '/../../../config.php');
-require_once ($CFG->libdir . '/adminlib.php');
-require_once ($CFG->libdir . '/gradelib.php');
-require_once ($CFG->dirroot . '/' . $CFG->admin . '/tool/gradebookreset/forms/coursefilter.php');
-require_once ($CFG->dirroot . '/' . $CFG->admin . '/tool/gradebookreset/classes/GetGrades.php');
+global $CFG;
+require_once(__DIR__ . '/../../../config.php');
+require_once($CFG->libdir . '/adminlib.php');
+require_once($CFG->libdir . '/gradelib.php');
+require_once($CFG->dirroot . '/' . $CFG->admin . '/tool/gradebookreset/forms/coursefilter.php');
+require_once($CFG->dirroot . '/' . $CFG->admin . '/tool/gradebookreset/classes/GetGrades.php');
 
-global $DB;
+global  $PAGE, $OUTPUT;
 
 $PAGE->set_url('/tool/gradebookreset/index.php');
 $PAGE->set_context(context_system::instance());
@@ -34,9 +35,7 @@ $PAGE->set_title(get_string('gradebookreset', 'tool_gradebookreset'));
 $PAGE->set_heading(get_string('gradebookreset', 'tool_gradebookreset'));
 
 $mform = new coursefilter();
-
 $mform->set_data(array());
-
 $mform->display();
 
 echo $OUTPUT->footer();

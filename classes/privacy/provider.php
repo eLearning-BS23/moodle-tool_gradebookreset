@@ -18,7 +18,7 @@
  * Privacy Subsystem implementation for tool_gradebookreset.
  *
  * @package    tool_gradebookreset
- * @copyright  22021 Brain station 23 ltd <>  {@link https://brainstation-23.com/}
+ * @copyright  2021 Brain station 23 ltd <>  {@link https://brainstation-23.com/}
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
@@ -29,7 +29,7 @@ defined('MOODLE_INTERNAL') || die();
 /**
  * Privacy Subsystem for tool_gradebookreset implementing null_provider.
  *
- * @copyright  22021 Brain station 23 ltd <>  {@link https://brainstation-23.com/}
+ * @copyright  2021 Brain station 23 ltd <>  {@link https://brainstation-23.com/}
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 class provider implements \core_privacy\local\metadata\null_provider {

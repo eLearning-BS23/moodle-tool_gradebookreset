@@ -22,7 +22,7 @@
  * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
-
+global $CFG;
 require_once($CFG->libdir.'/gradelib.php');
 
 /**
@@ -97,7 +97,7 @@ abstract class abs_grade_report {
      */
     public $lang_strings = array();
 
-    // GROUP VARIABLES (including SQL)
+    // GROUP VARIABLES (including SQL).
 
     /**
      * The current group being displayed.
@@ -180,13 +180,13 @@ abstract class abs_grade_report {
         $this->context   = $context;
         $this->page      = $page;
 
-        // roles to be displayed in the gradebook
+        // Roles to be displayed in the gradebook.
         $this->gradebookroles = $CFG->gradebookroles;
 
-        // Set up link to preferences page
+        // Set up link to preferences page.
         $this->preferences_page = $CFG->wwwroot.'/grade/report/grader/preferences.php?id='.$courseid;
 
-        // init gtree in child class
+        // Init gtree in child class.
     }
 
     /**
@@ -222,7 +222,7 @@ abstract class abs_grade_report {
                 if (!empty($objectid)) {
                     $retval = get_user_preferences($fullprefname . $objectid);
                     if (empty($retval)) {
-                        // No item pref found, we are returning the global preference
+                        // No item pref found, we are returning the global preference.
                         $retval = $this->get_pref($pref);
                         $objectid = null;
                     }
@@ -366,7 +366,7 @@ abstract class abs_grade_report {
      * Sets up this object's group variables, mainly to restrict the selection of users to display.
      */
     protected function setup_groups() {
-        // find out current groups mode
+        // Find out current groups mode.
         if ($this->groupmode = groups_get_course_groupmode($this->course)) {
             if (empty($this->gpr->groupid)) {
                 $this->currentgroup = groups_get_course_group($this->course, true);
@@ -376,7 +376,7 @@ abstract class abs_grade_report {
             $this->group_selector = groups_print_course_menu($this->course, $this->pbarurl, true);
 
             if ($this->groupmode == SEPARATEGROUPS and !$this->currentgroup and !has_capability('moodle/site:accessallgroups', $this->context)) {
-                $this->currentgroup = -2; // means can not access any groups at all
+                $this->currentgroup = -2; // Means can not access any groups at all.
             }
             if ($this->currentgroup) {
                 if ($group = groups_get_group($this->currentgroup)) {
@@ -384,7 +384,7 @@ abstract class abs_grade_report {
                 }
                 $this->groupsql             = " JOIN {groups_members} gm ON gm.userid = u.id ";
                 $this->groupwheresql        = " AND gm.groupid = :gr_grpid ";
-                $this->groupwheresql_params = array('gr_grpid'=>$this->currentgroup);
+                $this->groupwheresql_params = array('gr_grpid' => $this->currentgroup);
             }
         }
     }
@@ -434,7 +434,7 @@ abstract class abs_grade_report {
      */
     protected function blank_hidden_total_and_adjust_bounds($courseid, $course_item, $finalgrade) {
         global $CFG, $DB;
-        static $hiding_affected = null;//array of items in this course affected by hiding
+        static $hiding_affected = null; //Array of items in this course affected by hiding.
 
         // If we're dealing with multiple users we need to know when we've moved on to a new user.
         static $previous_userid = null;
@@ -442,14 +442,14 @@ abstract class abs_grade_report {
         // If we're dealing with multiple courses we need to know when we've moved on to a new course.
         static $previous_courseid = null;
 
-        $coursegradegrade = grade_grade::fetch(array('userid'=>$this->user->id, 'itemid'=>$course_item->id));
+        $coursegradegrade = grade_grade::fetch(array('userid' => $this->user->id, 'itemid' => $course_item->id));
         $grademin = $course_item->grademin;
         $grademax = $course_item->grademax;
         if ($coursegradegrade) {
             $grademin = $coursegradegrade->get_grade_min();
             $grademax = $coursegradegrade->get_grade_max();
         } else {
-            $coursegradegrade = new grade_grade(array('userid'=>$this->user->id, 'itemid'=>$course_item->id), false);
+            $coursegradegrade = new grade_grade(array('userid' => $this->user->id, 'itemid' => $course_item->id), false);
         }
         $hint = $coursegradegrade->get_aggregation_hint();
         $aggregationstatus = $hint['status'];
@@ -476,7 +476,7 @@ abstract class abs_grade_report {
         }
 
         if (!$hiding_affected) {
-            $items = grade_item::fetch_all(array('courseid'=>$courseid));
+            $items = grade_item::fetch_all(array('courseid' => $courseid));
             $grades = array();
             $sql = "SELECT g.*
                       FROM {grade_grades} g
@@ -500,7 +500,7 @@ abstract class abs_grade_report {
             $hiding_affected = grade_grade::get_hiding_affected($grades, $items);
         }
 
-        //if the item definitely depends on a hidden item
+        //If the item definitely depends on a hidden item.
         if (array_key_exists($course_item->id, $hiding_affected['altered']) ||
             array_key_exists($course_item->id, $hiding_affected['alteredgrademin']) ||
             array_key_exists($course_item->id, $hiding_affected['alteredgrademax']) ||
@@ -510,7 +510,7 @@ abstract class abs_grade_report {
                 // Hide the grade, but only when it has changed.
                 $finalgrade = null;
             } else {
-                //use reprocessed marks that exclude hidden items
+                //Use reprocessed marks that exclude hidden items.
                 if (array_key_exists($course_item->id, $hiding_affected['altered'])) {
                     $finalgrade = $hiding_affected['altered'][$course_item->id];
                 }
@@ -535,12 +535,12 @@ abstract class abs_grade_report {
                 }
             }
         } else if (array_key_exists($course_item->id, $hiding_affected['unknowngrades'])) {
-            //not sure whether or not this item depends on a hidden item
+            //Not sure whether or not this item depends on a hidden item.
             if (!$this->showtotalsifcontainhidden[$courseid]) {
-                //hide the grade
+                //Hide the grade
                 $finalgrade = null;
             } else {
-                //use reprocessed marks that exclude hidden items
+                //Use reprocessed marks that exclude hidden items.
                 $finalgrade = $hiding_affected['unknowngrades'][$course_item->id];
 
                 if (array_key_exists($course_item->id, $hiding_affected['alteredgrademin'])) {
@@ -557,8 +557,7 @@ abstract class abs_grade_report {
                 }
             }
         }
-
-        return array('grade' => $finalgrade, 'grademin' => $grademin, 'grademax' => $grademax, 'aggregationstatus'=>$aggregationstatus, 'aggregationweight'=>$aggregationweight);
+        return array('grade' => $finalgrade, 'grademin' => $grademin, 'grademax' => $grademax, 'aggregationstatus' => $aggregationstatus, 'aggregationweight' => $aggregationweight);
     }
 
     /**

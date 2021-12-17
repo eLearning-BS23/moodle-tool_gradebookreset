@@ -1,5 +1,4 @@
 <?php
-
 // This file is part of Moodle - http://moodle.org/
 //
 // Moodle is free software: you can redistribute it and/or modify
@@ -24,5 +23,5 @@
  */
 
 defined('MOODLE_INTERNAL') || die;
-
+global $ADMIN, $CFG;
 $ADMIN->add('grades', new admin_externalpage('gradebookreset', get_string('gradebookreset', 'tool_gradebookreset'), "$CFG->wwwroot/$CFG->admin/tool/gradebookreset/index.php"));

@@ -22,8 +22,10 @@
  * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
-require_once ($CFG->dirroot . '/admin/tool/gradebookreset/report_lib.php');
-require_once ($CFG->libdir . '/tablelib.php');
+
+global $CFG;
+require_once($CFG->dirroot . '/admin/tool/gradebookreset/report_lib.php');
+require_once($CFG->libdir . '/tablelib.php');
 
 /**
  * Class providing an API for the grade report building and displaying.
@@ -58,7 +60,7 @@ class grade_report_reset extends abs_grade_report {
      */
     public $gradeserror = array();
 
-    // SQL-RELATED
+    // SQL-RELATED.
 
     /**
      * The id of the grade_item by which this report will be sorted.
@@ -129,7 +131,7 @@ class grade_report_reset extends abs_grade_report {
 
         $this->canviewhidden = has_capability('moodle/grade:viewhidden', context_course::instance($this->course->id));
 
-        // load collapsed settings for this report
+        // Load collapsed settings for this report.
         $this->collapsed = static::get_collapsed_preferences($this->course->id);
 
         if (empty($CFG->enableoutcomes)) {
@@ -138,18 +140,18 @@ class grade_report_reset extends abs_grade_report {
             $nooutcomes = get_user_preferences('abs_grade_report_shownooutcomes');
         }
 
-        // if user report preference set or site report setting set use it, otherwise use course or site setting
+        // If user report preference set or site report setting set use it, otherwise use course or site setting.
         $switch = $this->get_pref('aggregationposition');
         if ($switch == '') {
             $switch = grade_get_setting($this->courseid, 'aggregationposition', $CFG->grade_aggregationposition);
         }
 
-        // Grab the grade_tree for this course
+        // Grab the grade_tree for this course.
         $this->gtree = new grade_tree($this->courseid, true, $switch, $this->collapsed, $nooutcomes);
 
         $this->sortitemid = $sortitemid;
 
-        // base url for sorting by first/last name
+        // Base url for sorting by first/last name.
 
         $this->baseurl = new moodle_url('index.php', array('id' => $this->courseid));
 
@@ -182,8 +184,8 @@ class grade_report_reset extends abs_grade_report {
         if ($this->groupmode == SEPARATEGROUPS and !has_capability('moodle/site:accessallgroups', $this->context)) {
             $separategroups = true;
             $mygroups = groups_get_user_groups($this->course->id);
-            $mygroups = $mygroups[0]; // ignore groupings
-            // reorder the groups fro better perf below
+            $mygroups = $mygroups[0]; // Ignore groupings.
+            // Reorder the groups for better perf below.
             $current = array_search($this->currentgroup, $mygroups);
             if ($current !== false) {
                 unset($mygroups[$current]);
@@ -192,7 +194,7 @@ class grade_report_reset extends abs_grade_report {
         }
         $viewfullnames = has_capability('moodle/site:viewfullnames', $this->context);
 
-        // always initialize all arrays
+        // Always initialize all arrays.
         $queue = array();
 
         $this->load_users();
@@ -206,7 +208,7 @@ class grade_report_reset extends abs_grade_report {
 
             $needsupdate = false;
 
-            // skip, not a grade nor feedback
+            // Skip, not a grade nor feedback.
             if (strpos($varname, 'grade') === 0) {
                 $datatype = 'grade';
             } else if (strpos($varname, 'feedback') === 0) {
@@ -223,22 +225,21 @@ class grade_report_reset extends abs_grade_report {
                     // Was change requested?
                     $oldvalue = $this->grades[$userid][$itemid];
                     if ($datatype === 'grade') {
-                        // If there was no grade and there still isn't
+                        // If there was no grade and there still isn't.
                         if (is_null($oldvalue->finalgrade) && $postedvalue == -1) {
-                            // -1 means no grade
+                            // Here, -1 means no grade.
                             continue;
                         }
 
-                        // If the grade item uses a custom scale
+                        // If the grade item uses a custom scale.
                         if (!empty($oldvalue->grade_item->scaleid)) {
 
                             if ((int) $oldvalue->finalgrade === (int) $postedvalue) {
                                 continue;
                             }
                         } else {
-                            // The grade item uses a numeric scale
-
-                            // Format the finalgrade from the DB so that it matches the grade from the client
+                            // The grade item uses a numeric scale.
+                            // Format the finalgrade from the DB so that it matches the grade from the client.
                             if ($postedvalue === format_float($oldvalue->finalgrade, $oldvalue->grade_item->get_decimals())) {
                                 continue;
                             }
@@ -260,13 +261,13 @@ class grade_report_reset extends abs_grade_report {
                         print_error('invalidgradeitemid');
                     }
 
-                    // Pre-process grade
+                    // Pre-process grade.
                     if ($datatype == 'grade') {
                         $feedback = false;
                         $feedbackformat = false;
                         if ($gradeitem->gradetype == GRADE_TYPE_SCALE) {
                             if ($postedvalue == -1) {
-                                // -1 means no grade
+                                // Here, -1 means no grade.
                                 $finalgrade = null;
                             } else {
                                 $finalgrade = $postedvalue;
@@ -317,10 +318,9 @@ class grade_report_reset extends abs_grade_report {
                         }
                     }
 
-                    // group access control
+                    // Group access control.
                     if ($separategroups) {
-                        // note: we can not use $this->currentgroup because it would fail badly
-                        //       when having two browser windows each with different group
+                        // Note: we can not use $this->currentgroup because it would fail badly, when having two browser windows each with different group.
                         $sharinggroup = false;
                         foreach ($mygroups as $groupid) {
                             if (groups_is_member($groupid, $userid)) {
@@ -329,7 +329,7 @@ class grade_report_reset extends abs_grade_report {
                             }
                         }
                         if (!$sharinggroup) {
-                            // either group membership changed or somebody is hacking grades of other group
+                            // Either group membership changed or somebody is hacking grades of other group.
                             $warnings[] = get_string('errorsavegrade', 'grades');
                             continue;
                         }
@@ -338,7 +338,7 @@ class grade_report_reset extends abs_grade_report {
                     $gradeitem->update_final_grade($userid, $finalgrade, 'gradebook', $feedback,
                         FORMAT_MOODLE, null, null, true);
 
-                    // We can update feedback without reloading the grade item as it doesn't affect grade calculations
+                    // We can update feedback without reloading the grade item as it doesn't affect grade calculations.
                     if ($datatype === 'feedback') {
                         $this->grades[$userid][$itemid]->feedback = $feedback;
                     }
@@ -347,7 +347,7 @@ class grade_report_reset extends abs_grade_report {
         }
 
         if ($changedgrades) {
-            // If a final grade was overriden reload grades so dependent grades like course total will be correct
+            // If a final grade was overriden reload grades so dependent grades like course total will be correct.
             $this->grades = null;
         }
 
@@ -375,7 +375,7 @@ class grade_report_reset extends abs_grade_report {
                     $this->sortorder = $SESSION->gradeuserreport->sort = 'DESC';
                 }
             } else {
-                // this is the first sort, i.e. by last name
+                // This is the first sort, i.e. by last name.
                 if (!isset($SESSION->gradeuserreport->sortitemid)) {
                     if ($this->sortitemid == 'firstname' || $this->sortitemid == 'lastname') {
                         $this->sortorder = $SESSION->gradeuserreport->sort = 'ASC';
@@ -383,7 +383,7 @@ class grade_report_reset extends abs_grade_report {
                         $this->sortorder = $SESSION->gradeuserreport->sort = 'DESC';
                     }
                 } else if ($SESSION->gradeuserreport->sortitemid == $this->sortitemid) {
-                    // same as last sort
+                    // Same as last sort.
                     if ($SESSION->gradeuserreport->sort == 'ASC') {
                         $this->sortorder = $SESSION->gradeuserreport->sort = 'DESC';
                     } else {
@@ -399,7 +399,7 @@ class grade_report_reset extends abs_grade_report {
             }
             $SESSION->gradeuserreport->sortitemid = $this->sortitemid;
         } else {
-            // not requesting sort, use last setting (for paging)
+            // Not requesting sort, use last setting (for paging).
 
             if (isset($SESSION->gradeuserreport->sortitemid)) {
                 $this->sortitemid = $SESSION->gradeuserreport->sortitemid;
@@ -562,7 +562,7 @@ class grade_report_reset extends abs_grade_report {
             return;
         }
 
-        // please note that we must fetch all grade_grades fields if we want to construct grade_grade object from it!
+        // Please note that we must fetch all grade_grades fields if we want to construct grade_grade object from it!
         $params = array_merge(array('courseid' => $this->courseid), $this->userselect_params);
         $sql = "SELECT g.*
                   FROM {grade_items} gi,
@@ -581,28 +581,28 @@ class grade_report_reset extends abs_grade_report {
                     $this->allgrades[$graderec->userid][$graderec->itemid] = $grade;
                 }
                 if (in_array($graderec->userid, $userids) and array_key_exists($graderec->itemid, $this->gtree->get_items())) {
-                    // some items may not be present!!
+                    // Some items may not be present!!
                     $this->grades[$graderec->userid][$graderec->itemid] = $grade;
-                    $this->grades[$graderec->userid][$graderec->itemid]->grade_item = $this->gtree->get_item($graderec->itemid); // db caching
+                    $this->grades[$graderec->userid][$graderec->itemid]->grade_item = $this->gtree->get_item($graderec->itemid); // DB caching.
                 }
             }
         }
 
-        // prefil grades that do not exist yet
+        // Prefill grades that do not exist yet.
         foreach ($userids as $userid) {
             foreach ($this->gtree->get_items() as $itemid => $unused) {
                 if (!isset($this->grades[$userid][$itemid])) {
                     $this->grades[$userid][$itemid] = new grade_grade();
                     $this->grades[$userid][$itemid]->itemid = $itemid;
                     $this->grades[$userid][$itemid]->userid = $userid;
-                    $this->grades[$userid][$itemid]->grade_item = $this->gtree->get_item($itemid); // db caching
+                    $this->grades[$userid][$itemid]->grade_item = $this->gtree->get_item($itemid); // DB caching.
 
                     $this->allgrades[$userid][$itemid] = $this->grades[$userid][$itemid];
                 }
             }
         }
 
-        // Pre fill grades for any remaining items which might be collapsed.
+        // Prefill grades for any remaining items which might be collapsed.
         foreach ($userids as $userid) {
             foreach ($allgradeitems as $itemid => $gradeitem) {
                 if (!isset($this->allgrades[$userid][$itemid])) {
@@ -657,7 +657,6 @@ class grade_report_reset extends abs_grade_report {
         if (get_capability_info('gradereport/' . $CFG->grade_profilereport . ':view')) {
             $canseeselectmultiple = has_capability('gradereport/' . $CFG->grade_profilereport . ':view', $this->context);
         }
-
 
         $hasuserreportcell = $canseeuserreport || $canseeselectmultiple;
         $viewfullnames = has_capability('moodle/site:viewfullnames', $this->context);
@@ -747,7 +746,6 @@ class grade_report_reset extends abs_grade_report {
                 ['class' => 'username']
             );
 
-
             // The browser's scrollbar may partly cover (in certain operative systems) the content in the user cells
             // when horizontally scrolling through the table contents (most noticeable when in RTL mode).
             // Therefore, add slight padding on the left or right when using RTL mode.
@@ -758,7 +756,6 @@ class grade_report_reset extends abs_grade_report {
             $userreportcell = new html_table_cell();
             $userreportcell->attributes['class'] = 'userreport';
             $userreportcell->header = false;
-
 
             //multiple select checkbox
             if ($canseeselectmultiple) {
@@ -794,14 +791,14 @@ class grade_report_reset extends abs_grade_report {
         return $rows;
     }
 
-    public function delete_multiple_button(){
+    public function delete_multiple_button() {
         echo "<button class='btn btn-primary resetbutton' id='select_course_id_" . $this->courseid . "' style='margin: -20px 0px 10px 30%;'>";
         echo get_string('resetselected', 'tool_gradebookreset');
         echo "</button>";
     }
 
 
-    //Reset Course Grade function
+    // Reset Course Grade function.
     public function reset_course_grade($useridArray) {
         global $CFG, $DB, $PAGE;
 
@@ -825,9 +822,9 @@ class grade_report_reset extends abs_grade_report {
                     $this->allgrades[$graderec->userid][$graderec->itemid] = $grade;
                 }
                 if (in_array($graderec->userid, $userids) and array_key_exists($graderec->itemid, $this->gtree->get_items())) {
-                    // some items may not be present!!
+                    // Some items may not be present!!
                     $this->grades[$graderec->userid][$graderec->itemid] = $grade;
-                    $this->grades[$graderec->userid][$graderec->itemid]->grade_item = $this->gtree->get_item($graderec->itemid); // db caching
+                    $this->grades[$graderec->userid][$graderec->itemid]->grade_item = $this->gtree->get_item($graderec->itemid); // DB caching.
                 }
             }
         }
@@ -839,11 +836,8 @@ class grade_report_reset extends abs_grade_report {
      * @return array Array of html_table_row objects
      */
 
-
-
     public function get_right_rows($displayaverages) {
         global $CFG, $USER, $OUTPUT, $DB, $PAGE;
-
 
         $rows = array();
         $this->rowcount = 0;
@@ -905,7 +899,7 @@ class grade_report_reset extends abs_grade_report {
                     $catlevel = '';
                 }
 
-                // Element is a filler
+                // Element is a filler.
                 if ($type == 'filler' or $type == 'fillerfirst' or $type == 'fillerlast') {
                     $fillercell = new html_table_cell();
                     $fillercell->attributes['class'] = $type . ' ' . $catlevel;
@@ -934,7 +928,7 @@ class grade_report_reset extends abs_grade_report {
                         $headingrow->cells[] = $categorycell;
                     }
                 } else {
-                    // Element is a grade_item
+                    // Element is a grade_item.
                     if ($element['object']->id == $this->sortitemid) {
                         if ($this->sortorder == 'ASC') {
                             $arrow = $this->get_sort_arrow('up', $sortlink);
@@ -968,7 +962,7 @@ class grade_report_reset extends abs_grade_report {
 
         $rows = $this->get_right_icons_row($rows);
 
-        // Preload scale objects for items with a scaleid and initialize tab indices
+        // Preload scale objects for items with a scaleid and initialize tab indices.
         $scaleslist = array();
         $tabindices = array();
 
@@ -1028,7 +1022,7 @@ class grade_report_reset extends abs_grade_report {
                 $itemcell->id = 'u' . $userid . 'i' . $itemid;
                 $itemcell->attributes['data-itemid'] = $itemid;
 
-                // Get the decimal points preference for this item
+                // Get the decimal points preference for this item.
                 $decimalpoints = $item->get_decimals();
 
                 if (array_key_exists($itemid, $unknown)) {
@@ -1048,11 +1042,11 @@ class grade_report_reset extends abs_grade_report {
                     $jsarguments['grades'][] = array('user' => $userid, 'item' => $itemid, 'grade' => $gradevalforjs);
                 }
 
-                // MDL-11274
-                // Hide grades in the grade report if the current grade doesn't have 'moodle/grade:viewhidden'
+                // MDL-11274.
+                // Hide grades in the grade report if the current grade doesn't have 'moodle/grade:viewhidden'.
                 if (!$this->canviewhidden and $grade->is_hidden()) {
                     if (!empty($CFG->grade_hiddenasdate) and $grade->get_datesubmitted() and !$item->is_category_item() and !$item->is_course_item()) {
-                        // the problem here is that we do not have the time when grade value was modified, 'timemodified' is general modification date for grade_grades records
+                        // The problem here is that we do not have the time when grade value was modified, 'timemodified' is general modification date for grade_grades records.
                         $itemcell->text = "<span class='datesubmitted'>" .
                         userdate($grade->get_datesubmitted(), $strftimedatetimeshort) . "</span>";
                     } else {
@@ -1062,7 +1056,7 @@ class grade_report_reset extends abs_grade_report {
                     continue;
                 }
 
-                // emulate grade element
+                // Emulate grade element.
                 $eid = $this->gtree->get_grade_eid($grade);
                 $element = array('eid' => $eid, 'object' => $grade, 'type' => 'grade');
 
@@ -1090,7 +1084,7 @@ class grade_report_reset extends abs_grade_report {
                     $itemcell->text .= " <span class='excludedfloater'>" . $strexcludedgrades . "</span> ";
                 }
 
-                // Do not show any icons if no grade (no record in DB to match)
+                // Do not show any icons if no grade (no record in DB to match).
                 if (!$item->needsupdate and $USER->gradeediting[$this->courseid]) {
                     $itemcell->text .= $this->get_icons($element);
                 }
@@ -1107,9 +1101,9 @@ class grade_report_reset extends abs_grade_report {
                     $gradepass = '';
                 }
 
-                // if in editing mode, we need to print either a text box
+                // If in editing mode, we need to print either a text box
                 // or a drop down (for scales)
-                // grades in item of type grade category or course are not directly editable
+                // grades in item of type grade category or course are not directly editable.
                 if ($item->needsupdate) {
                     $itemcell->text .= "<span class='gradingerror{$hidden}'>" . $strerror . "</span>";
 
@@ -1125,12 +1119,11 @@ class grade_report_reset extends abs_grade_report {
 
                     if ($item->scaleid && !empty($scalesarray[$item->scaleid])) {
                         $scale = $scalesarray[$item->scaleid];
-                        $gradeval = (int) $gradeval; // scales use only integers
+                        $gradeval = (int) $gradeval; // Scales use only integers.
                         $scales = explode(",", $scale->scale);
-                        // reindex because scale is off 1
+                        // Reindex because scale is off 1.
 
-                        // MDL-12104 some previous scales might have taken up part of the array
-                        // so this needs to be reset
+                        // MDL-12104 some previous scales might have taken up part of the array so this needs to be reset.
                         $scaleopt = array();
                         $i = 0;
                         foreach ($scales as $scaleoption) {
@@ -1154,17 +1147,17 @@ class grade_report_reset extends abs_grade_report {
                         } else if (!empty($scale)) {
                             $scales = explode(",", $scale->scale);
 
-                            // invalid grade if gradeval < 1
+                            // Invalid grade if gradeval < 1 .
                             if ($gradeval < 1) {
                                 $itemcell->text .= "<span class='gradevalue{$hidden}{$gradepass}'>-</span>";
                             } else {
-                                $gradeval = $grade->grade_item->bounded_grade($gradeval); //just in case somebody changes scale
+                                $gradeval = $grade->grade_item->bounded_grade($gradeval); //Just in case somebody changes scale.
                                 $itemcell->text .= "<span class='gradevalue{$hidden}{$gradepass}'>{$scales[$gradeval - 1]}</span>";
                             }
                         }
 
                     } else if ($item->gradetype != GRADE_TYPE_TEXT) {
-                        // Value type
+                        // Value type.
                         if ($quickgrading and $grade->is_editable()) {
                             $value = format_float($gradeval, $decimalpoints);
                             $gradelabel = $fullname . ' ' . $item->get_name(true);
@@ -1179,7 +1172,7 @@ class grade_report_reset extends abs_grade_report {
                         }
                     }
 
-                    // If quickfeedback is on, print an input element
+                    // If quickfeedback is on, print an input element.
                     if ($showquickfeedback and $grade->is_editable()) {
                         $feedbacklabel = $fullname . ' ' . $item->get_name(true);
                         $itemcell->text .= '<label class="accesshide" for="feedback_' . $userid . '_' . $item->id . '">'
@@ -1189,7 +1182,7 @@ class grade_report_reset extends abs_grade_report {
                     }
 
                 } else {
-                    // Not editing
+                    // Not editing.
                     $gradedisplaytype = $item->get_displaytype();
 
                     if ($item->scaleid && !empty($scalesarray[$item->scaleid])) {
@@ -1209,7 +1202,7 @@ class grade_report_reset extends abs_grade_report {
                     }
 
                     if ($item->needsupdate) {
-                        $itemcell->text .= "<span class='gradingerror{$hidden}{$gradepass}'>" . $error . "</span>";
+                        $itemcell->text .= "<span class='gradingerror{$hidden}{$gradepass}'> </span>";
                     } else {
                         // The max and min for an aggregation may be different to the grade_item.
                         if (!is_null($gradeval)) {
@@ -1251,7 +1244,7 @@ class grade_report_reset extends abs_grade_report {
             }
             $jsarguments['cfg']['feedbacktrunclength'] = $this->feedback_trunc_length;
 
-            // Student grades and feedback are already at $jsarguments['feedback'] and $jsarguments['grades']
+            // Student grades and feedback are already at $jsarguments['feedback'] and $jsarguments['grades'].
         }
         $jsarguments['cfg']['isediting'] = (bool) $USER->gradeediting[$this->courseid];
         $jsarguments['cfg']['courseid'] = $this->courseid;
@@ -1300,15 +1293,13 @@ class grade_report_reset extends abs_grade_report {
         $fulltable->caption = get_string('summarygrader', 'tool_gradebookreset');
         $fulltable->captionhide = true;
 
-        // Extract rows from each side (left and right) and collate them into one row each
+        // Extract rows from each side (left and right) and collate them into one row each.
         foreach ($leftrows as $key => $row) {
             $row->cells = array_merge($row->cells, $rightrows[$key]->cells);
             $fulltable->data[] = $row;
-//            var_dump($row);
-            //            die();
         }
         $html .= html_writer::table($fulltable);
-        ///to here
+        //To here.
 
         return $OUTPUT->container($html, 'gradeparent');
     }
@@ -1358,7 +1349,6 @@ class grade_report_reset extends abs_grade_report {
             $rangerow->cells[] = $rangecell;
             $rows[] = $rangerow;
         }
-
         return $rows;
     }
 
@@ -1371,8 +1361,8 @@ class grade_report_reset extends abs_grade_report {
      */
     public function get_left_avg_row($rows = array(), $colspan = 1, $groupavg = false) {
         if (!$this->canviewhidden) {
-            // totals might be affected by hiding, if user can not see hidden grades the aggregations might be altered
-            // better not show them at all if user can not see all hideen grades
+            // Totals might be affected by hiding, if user can not see hidden grades the aggregations might be altered
+            // better not show them at all if user can not see all hidden grades.
             return $rows;
         }
 
@@ -1425,9 +1415,8 @@ class grade_report_reset extends abs_grade_report {
             $iconsrow->attributes['class'] = 'controls';
 
             foreach ($this->gtree->items as $itemid => $unused) {
-                // emulate grade element
+                // Emulate grade element.
                 $item = $this->gtree->get_item($itemid);
-
                 $eid = $this->gtree->get_item_eid($item);
                 $element = $this->gtree->locate_element($eid);
                 $itemcell = new html_table_cell();
@@ -1549,8 +1538,8 @@ class grade_report_reset extends abs_grade_report {
                 }
             }
 
-            // MDL-10875 Empty grades must be evaluated as grademin, NOT always 0
-            // This query returns a count of ungraded grades (NULL finalgrade OR no matching record in grade_grades table)
+            // MDL-10875 Empty grades must be evaluated as grademin, NOT always 0.
+            // This query returns a count of ungraded grades (NULL finalgrade OR no matching record in grade_grades table).
             $sql = "SELECT gi.id, COUNT(DISTINCT u.id) AS count
                       FROM {grade_items} gi
                       CROSS JOIN ($enrolledsql) u
@@ -1595,24 +1584,24 @@ class grade_report_reset extends abs_grade_report {
                 if ($meanselection == GRADE_REPORT_MEAN_GRADED) {
                     $meancount = $totalcount - $ungradedcount;
                 } else {
-                    // Bump up the sum by the number of ungraded items * grademin
+                    // Bump up the sum by the number of ungraded items * grademin.
                     $sumarray[$item->id] += $ungradedcount * $item->grademin;
                     $meancount = $totalcount;
                 }
 
-                // Determine which display type to use for this average
+                // Determine which display type to use for this average.
                 if ($USER->gradeediting[$this->courseid]) {
                     $displaytype = GRADE_DISPLAY_TYPE_REAL;
 
                 } else if ($averagesdisplaytype == GRADE_REPORT_PREFERENCE_INHERIT) {
-                    // no ==0 here, please resave the report and user preferences
+                    // No ==0 here, please re-save the report and user preferences.
                     $displaytype = $item->get_displaytype();
 
                 } else {
                     $displaytype = $averagesdisplaytype;
                 }
 
-                // Override grade_item setting if a display preference (not inherit) was set for the averages
+                // Override grade_item setting if a display preference (not inherit) was set for the averages.
                 if ($averagesdecimalpoints == GRADE_REPORT_PREFERENCE_INHERIT) {
                     $decimalpoints = $item->get_decimals();
 
@@ -1666,7 +1655,6 @@ class grade_report_reset extends abs_grade_report {
             $strswitchwhole = $this->get_lang_string('fullmode', 'grades');
 
             $url = new moodle_url($this->gpr->get_return_url(null, array('target' => $element['eid'], 'sesskey' => sesskey())));
-
         }
 
         $name = $element['object']->get_name();
@@ -1677,9 +1665,7 @@ class grade_report_reset extends abs_grade_report {
             'class' => 'gradeitemheader',
             'aria-describedby' => $describedbyid,
         ]);
-        $courseheader .= html_writer::div($showing, 'sr-only', [
-            'id' => $describedbyid,
-        ]);
+
         $courseheader .= $icon;
 
         return $courseheader;
@@ -1700,7 +1686,7 @@ class grade_report_reset extends abs_grade_report {
             return '<div class="grade_icons" />';
         }
 
-        // Init all icons
+        // Init all icons.
         $editicon = '';
 
         $editable = true;
@@ -1868,10 +1854,10 @@ class grade_report_reset extends abs_grade_report {
      */
     public static function do_process_action($target, $action, $courseid = null) {
         global $DB;
-        // TODO: this code should be in some grade_tree static method
+        // TODO: this code should be in some grade_tree static method.
         $targettype = substr($target, 0, 2);
         $targetid = substr($target, 2);
-        // TODO: end
+        // TODO: end.
 
         if ($targettype !== 'cg') {
             // The following code only works with categories.
@@ -1889,14 +1875,14 @@ class grade_report_reset extends abs_grade_report {
         $collapsed = static::get_collapsed_preferences($courseid);
 
         switch ($action) {
-            case 'switch_minus': // Add category to array of aggregatesonly
+            case 'switch_minus': // Add category to array of aggregatesonly.
                 if (!in_array($targetid, $collapsed['aggregatesonly'])) {
                     $collapsed['aggregatesonly'][] = $targetid;
                     static::set_collapsed_preferences($courseid, $collapsed);
                 }
                 break;
 
-            case 'switch_plus': // Remove category from array of aggregatesonly, and add it to array of gradesonly
+            case 'switch_plus': // Remove category from array of aggregatesonly, and add it to array of gradesonly.
                 $key = array_search($targetid, $collapsed['aggregatesonly']);
                 if ($key !== false) {
                     unset($collapsed['aggregatesonly'][$key]);
@@ -1906,7 +1892,7 @@ class grade_report_reset extends abs_grade_report {
                 }
                 static::set_collapsed_preferences($courseid, $collapsed);
                 break;
-            case 'switch_whole': // Remove the category from the array of collapsed cats
+            case 'switch_whole': // Remove the category from the array of collapsed cats.
                 $key = array_search($targetid, $collapsed['gradesonly']);
                 if ($key !== false) {
                     unset($collapsed['gradesonly'][$key]);
@@ -1933,9 +1919,6 @@ class grade_report_reset extends abs_grade_report {
         global $OUTPUT, $CFG;
         $arrows = array();
 
-        $strsortasc = $this->get_lang_string('sortasc', 'grades');
-        $strsortdesc = $this->get_lang_string('sortdesc', 'grades');
-
         // Sourced from tablelib.php
         // Check the full name display for sortable fields.
         if (has_capability('moodle/site:viewfullnames', $this->context)) {
@@ -1955,9 +1938,7 @@ class grade_report_reset extends abs_grade_report {
                 $arrows['studentname'] .= html_writer::link(
                     new moodle_url($this->baseurl, array('sortitemid' => $name)), $this->get_lang_string($name)
                 );
-                if ($this->sortitemid == $name) {
-                    $arrows['studentname'] .= $this->sortorder == 'ASC' ? $iconasc : $icondesc;
-                }
+
                 $arrows['studentname'] .= ' / ';
             }
 
@@ -1968,16 +1949,7 @@ class grade_report_reset extends abs_grade_report {
             $fieldlink = html_writer::link(new moodle_url($this->baseurl,
                 array('sortitemid' => $field)), \core_user\fields::get_display_name($field));
             $arrows[$field] = $fieldlink;
-
-            if ($field == $this->sortitemid) {
-                if ($this->sortorder == 'ASC') {
-                    $arrows[$field] .= $iconasc;
-                } else {
-                    $arrows[$field] .= $icondesc;
-                }
-            }
         }
-
         return $arrows;
     }
 
